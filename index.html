@@ -1,10 +1,568 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Your Name</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xie Jiayu Dias — Digital Journal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1814;
+      --ink-muted: #6b6560;
+      --ink-faint: #b0aa9f;
+      --paper: #faf8f4;
+      --paper-warm: #f3efe8;
+      --paper-card: #fff;
+      --accent: #c25c2e;
+      --accent-soft: #f0e4da;
+      --border: #e4ddd4;
+      --serif: 'Lora', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --max: 720px;
+      --nav-h: 64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--ink-muted);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    /* HERO */
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 5rem 1.5rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-bio {
+      font-size: 1.05rem;
+      color: var(--ink-muted);
+      max-width: 540px;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      background: var(--paper-warm);
+      color: var(--ink-muted);
+      border: 1px solid var(--border);
+      letter-spacing: 0.02em;
+    }
+
+    /* SECTION */
+    section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem;
+    }
+
+    section + section { border-top: 1px solid var(--border); }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 2rem;
+    }
+
+    /* POSTS */
+    .post-list { display: flex; flex-direction: column; gap: 0; }
+
+    .post-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 1.5rem;
+      padding: 1.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+      border-radius: 6px;
+      margin: 0 -0.75rem;
+    }
+
+    .post-item:last-child { border-bottom: none; }
+    .post-item:hover { background: var(--paper-warm); }
+
+    .post-date {
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+      padding-top: 0.2rem;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.45;
+      margin-bottom: 0.35rem;
+    }
+
+    .post-excerpt {
+      font-size: 0.875rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    .post-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    /* PROJECTS */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .project-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .project-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+
+    .project-name {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .project-desc {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .project-stack {
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin-top: 0.5rem;
+    }
+
+    /* PUBLICATIONS */
+    .pub-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .pub-item {
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--paper-card);
+    }
+
+    .pub-title {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      color: var(--ink);
+      line-height: 1.5;
+      margin-bottom: 0.4rem;
+    }
+
+    .pub-meta {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    .pub-link {
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-soft);
+      margin-top: 0.4rem;
+      display: inline-block;
+    }
+
+    /* NOW */
+    .now-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .now-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 0.5rem;
+    }
+
+    .now-value {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy { font-size: 0.82rem; color: var(--ink-faint); }
+
+    .footer-links { display: flex; gap: 1.25rem; list-style: none; }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .rule {
+      width: 32px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 540px) {
+      .post-item { grid-template-columns: 1fr; gap: 0.25rem; }
+      .post-date { padding-top: 0; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, I'm Your Name</h1>
-  <p>Welcome to my site.</p>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Xie Jiayu<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#writing">Writing</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#publications">Research</a></li>
+        <li><a href="#now">Now</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow">Digital Journal</p>
+    <h1>Data Engineer &<br /><em>AI Researcher.</em></h1>
+    <p class="hero-bio">
+      I build end-to-end data pipelines, ML models, and integration systems — across industry and academia. Currently focused on Explainable AI research and building tools for public education. This is where I share notes, half-finished ideas, and things I'm working through.
+    </p>
+    <div class="hero-tags">
+      <span class="tag">Explainable AI</span>
+      <span class="tag">Computer Vision</span>
+      <span class="tag">Data Engineering</span>
+      <span class="tag">Robotics</span>
+      <span class="tag">STEM Outreach</span>
+      <span class="tag">Research</span>
+    </div>
+  </header>
+
+  <!-- WRITING -->
+  <section id="writing">
+    <p class="section-label">Recent Writing</p>
+    <div class="rule"></div>
+    <div class="post-list">
+
+      <a href="#" class="post-item">
+        <span class="post-date">Jun 2026</span>
+        <div>
+          <p class="post-title">What Explainable AI actually means — and why it matters now</p>
+          <p class="post-excerpt">A plain-language breakdown of XAI: what interpretability really means, when black-box models fail us, and why I think this is the most important problem in applied AI right now.</p>
+          <span class="post-tag">explainable ai</span>
+        </div>
+      </a>
+
+      <a href="#" class="post-item">
+        <span class="post-date">May 2026</span>
+        <div>
+          <p class="post-title">How I built data pipelines at ExxonMobil — lessons from three years in the field</p>
+          <p class="post-excerpt">Source-to-target pipelines, Snowflake, dbt, and what I learned from working on data that actually moved millions of dollars.</p>
+          <span class="post-tag">data engineering</span>
+        </div>
+      </a>
+
+      <a href="#" class="post-item">
+        <span class="post-date">Apr 2026</span>
+        <div>
+          <p class="post-title">Training an agent inside a dream: notes on World Models</p>
+          <p class="post-excerpt">Reading Ha & Schmidhuber's World Models paper through the lens of my own robotics research — the parallels with Kalman filter-based tracking are striking.</p>
+          <span class="post-tag">ml / robotics</span>
+        </div>
+      </a>
+
+      <a href="#" class="post-item">
+        <span class="post-date">Mar 2026</span>
+        <div>
+          <p class="post-title">Teaching women to code: what I learned running STEM sessions in Brazil</p>
+          <p class="post-excerpt">Reflections from designing training roadmaps and delivering workshops for women in data and programming as part of ExxonMobil's local STEM committee.</p>
+          <span class="post-tag">stem outreach</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label">Projects</p>
+    <div class="rule"></div>
+    <div class="project-grid">
+
+      <a href="#" class="project-card">
+        <div class="project-icon">🧠</div>
+        <p class="project-name">Explainable AI Research</p>
+        <p class="project-desc">Independent research on XAI methods and development of AI-assisted tools designed to make machine learning accessible for public education.</p>
+        <p class="project-stack">Python · ML · AI-assisted tools</p>
+      </a>
+
+      <a href="#" class="project-card">
+        <div class="project-icon">🤖</div>
+        <p class="project-name">Robotic Substation System</p>
+        <p class="project-desc">Delivered a high-value integrated robotic system for electric substations at Lactec. Secured Phase II approval from sponsors with computer vision and ROS.</p>
+        <p class="project-stack">ROS · Computer Vision · Python</p>
+      </a>
+
+      <a href="#" class="project-card">
+        <div class="project-icon">📊</div>
+        <p class="project-name">Data Reconciliation with ML</p>
+        <p class="project-desc">Partnership R&D project with UFRJ exploring ML-based methods to solve data reconciliation challenges in large corporations.</p>
+        <p class="project-stack">Python · ML · Snowflake · dbt</p>
+      </a>
+
+      <a href="#" class="project-card">
+        <div class="project-icon">🔬</div>
+        <p class="project-name">Stochastic Models for Robotics</p>
+        <p class="project-desc">Master's thesis: designed Kalman filter-based tracking algorithms for mobile manipulators, implemented in ROS and Gazebo. NIST-sponsored research.</p>
+        <p class="project-stack">Matlab · ROS · Gazebo · Kalman Filters</p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <p class="section-label">Research & Publications</p>
+    <div class="rule"></div>
+    <div class="pub-list">
+
+      <div class="pub-item">
+        <p class="pub-title">Artificial Intelligence-Assisted Methodology for Dataset Reduction Applied to the Establishment of Power Interruption Limits in Brazil</p>
+        <p class="pub-meta">Co-authored · Energies, 2023</p>
+        <a href="https://www.mdpi.com/1996-1073/16/19/7012" class="pub-link" target="_blank">Read paper →</a>
+      </div>
+
+      <div class="pub-item">
+        <p class="pub-title">Stochastic Modeling for Mobile Manipulators</p>
+        <p class="pub-meta">Master's Thesis · Marquette University, 2021</p>
+        <a href="https://epublications.marquette.edu/theses_open/687/" class="pub-link" target="_blank">Read thesis →</a>
+      </div>
+
+      <div class="pub-item">
+        <p class="pub-title">A Monitoring and Management System for Medium-Scale Photovoltaic Plants</p>
+        <p class="pub-meta">Co-authored · IEEE PES ISGT Latin America, 2019</p>
+      </div>
+
+      <div class="pub-item">
+        <p class="pub-title">Pattern Recognition in Botanical Micro-traces for Forensics Applications using OpenCV</p>
+        <p class="pub-meta">Conference paper · XXIV Congresso Nacional de Criminalística, 2017</p>
+      </div>
+
+      <div class="pub-item">
+        <p class="pub-title">Optimal Control of Water Flow in an Ice Tray</p>
+        <p class="pub-meta">Conference paper · CNMAC, 2016</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- NOW -->
+  <section id="now">
+    <p class="section-label">Now</p>
+    <div class="rule"></div>
+    <div class="now-grid">
+      <div class="now-item">
+        <p class="now-label">Working on</p>
+        <p class="now-value">Independent XAI research & AI-assisted education tools</p>
+      </div>
+      <div class="now-item">
+        <p class="now-label">Exploring</p>
+        <p class="now-value">Interpretability methods in modern ML systems</p>
+      </div>
+      <div class="now-item">
+        <p class="now-label">Location</p>
+        <p class="now-value">Knoxville, TN, USA</p>
+      </div>
+      <div class="now-item">
+        <p class="now-label">Languages</p>
+        <p class="now-value">Portuguese · English · Cantonese</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">About</p>
+    <div class="rule"></div>
+    <p style="font-family: var(--serif); font-size: 1.05rem; color: var(--ink); line-height: 1.85; max-width: 560px;">
+      I'm a Data Engineer and AI Researcher with a background in Electronic Engineering and a Master's in Computer Vision from Marquette University. I've built data systems at ExxonMobil, conducted computer vision and robotics R&D at Lactec, and mentored students across data science and engineering.
+    </p>
+    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--ink-muted); max-width: 560px; line-height: 1.7;">
+      I care deeply about making AI understandable — not just to researchers, but to everyone. Outside of work, I'm passionate about STEM outreach, especially supporting women in data and programming. This journal is where I think out loud.
+    </p>
+    <p style="margin-top: 1.5rem;">
+      <a href="mailto:jiayuxie95@gmail.com" style="font-size: 0.9rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 1px;">
+        jiayuxie95@gmail.com
+      </a>
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-copy">© 2026 Xie Jiayu Dias. Built with HTML, hosted on GitHub Pages.</p>
+      <ul class="footer-links">
+        <li><a href="https://linkedin.com/in/xie-jiayu" target="_blank">LinkedIn</a></li>
+        <li><a href="mailto:jiayuxie95@gmail.com">Email</a></li>
+        <li><a href="#">RSS</a></li>
+      </ul>
+    </div>
+  </footer>
+
 </body>
 </html>
