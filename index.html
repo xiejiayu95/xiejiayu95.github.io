@@ -21,8 +21,8 @@
       --border: #e4ddd4;
       --serif: 'Lora', Georgia, serif;
       --sans: 'DM Sans', system-ui, sans-serif;
-      --max: 720px;
       --nav-h: 64px;
+      --sidebar-w: 220px;
     }
 
     html { scroll-behavior: smooth; }
@@ -36,531 +36,638 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* NAV */
+    /* ══ TOP NAV ══ */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(250, 248, 244, 0.92);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: var(--nav-h);
+      background: rgba(250,248,244,0.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      height: var(--nav-h);
       display: flex;
       align-items: center;
     }
 
     .nav-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      width: 100%; max-width: 1100px;
+      margin: 0 auto; padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
     }
 
     .nav-logo {
       font-family: var(--serif);
-      font-size: 1.1rem;
-      color: var(--ink);
-      text-decoration: none;
+      font-size: 1.1rem; color: var(--ink);
+      text-decoration: none; letter-spacing: -0.01em;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 1.6rem; list-style: none; align-items: center; }
+
+    .nav-links a {
+      font-size: 0.86rem; color: var(--ink-muted);
+      text-decoration: none; letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 500; }
+
+    .btn-dl {
+      font-size: 0.78rem; font-weight: 500;
+      padding: 0.35rem 1rem; border-radius: 100px;
+      background: var(--accent); color: #fff;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .btn-dl:hover { opacity: 0.85; }
+
+    /* ══ PAGE SHELL ══ */
+    .page-shell {
+      display: flex;
+      padding-top: var(--nav-h);
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    /* ══ LEFT SIDEBAR ══ */
+    .left-sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      padding: 2rem 1.25rem 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .avatar-wrap {
+      width: 84px; height: 84px;
+      border-radius: 50%; overflow: hidden;
+      margin-bottom: 1rem;
+      border: 2px solid var(--border);
+      background: var(--paper-warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    .sidebar-name {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--ink); margin-bottom: 0.45rem;
       letter-spacing: -0.01em;
     }
 
-    .nav-logo span { color: var(--accent); }
-
-    .nav-links {
-      display: flex;
-      gap: 1.75rem;
-      list-style: none;
+    .sidebar-bio {
+      font-size: 0.8rem; color: var(--ink-muted);
+      line-height: 1.6; margin-bottom: 1.4rem;
     }
 
-    .nav-links a {
-      font-size: 0.875rem;
-      font-weight: 400;
-      color: var(--ink-muted);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      transition: color 0.2s;
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .sidebar-link {
+      display: flex; align-items: center; gap: 0.55rem;
+      font-size: 0.8rem; color: var(--ink-muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .sidebar-link:hover { color: var(--accent); }
+    .sidebar-link .icon {
+      width: 16px; text-align: center;
+      font-size: 0.85rem; flex-shrink: 0;
     }
 
-    .nav-links a:hover { color: var(--ink); }
+    /* ══ MAIN CONTENT ══ */
+    .main-content {
+      flex: 1; min-width: 0;
+      padding: 3.5rem 2.5rem 6rem;
+    }
 
-    /* HERO */
+    /* ── hero ── */
     .hero {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 5rem 1.5rem 3.5rem;
+      padding-bottom: 2.5rem;
       border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
     }
 
     .hero-eyebrow {
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
+      font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.85rem;
     }
 
     .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 600;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      color: var(--ink);
-      margin-bottom: 1.25rem;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 600; line-height: 1.2;
+      letter-spacing: -0.02em; color: var(--ink);
+      margin-bottom: 1rem;
     }
-
-    .hero h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
 
     .hero-bio {
-      font-size: 1.05rem;
-      color: var(--ink-muted);
-      max-width: 540px;
-      line-height: 1.8;
-      margin-bottom: 2rem;
+      font-size: 1rem; color: var(--ink-muted);
+      max-width: 520px; line-height: 1.8; margin-bottom: 1.75rem;
     }
 
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 
     .tag {
-      font-size: 0.78rem;
-      font-weight: 500;
-      padding: 0.3rem 0.75rem;
-      border-radius: 100px;
-      background: var(--paper-warm);
-      color: var(--ink-muted);
-      border: 1px solid var(--border);
-      letter-spacing: 0.02em;
+      font-size: 0.75rem; font-weight: 500;
+      padding: 0.28rem 0.7rem; border-radius: 100px;
+      background: var(--paper-warm); color: var(--ink-muted);
+      border: 1px solid var(--border); letter-spacing: 0.02em;
     }
 
-    /* SECTION */
-    section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 3.5rem 1.5rem;
-    }
-
-    section + section { border-top: 1px solid var(--border); }
+    /* ── generic section ── */
+    .section { margin-bottom: 3.5rem; }
 
     .section-label {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: 2rem;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 1.5rem;
     }
 
-    /* POSTS */
-    .post-list { display: flex; flex-direction: column; gap: 0; }
+    .rule { width: 28px; height: 2px; background: var(--accent); margin-bottom: 1.5rem; }
+
+    /* ── posts ── */
+    .post-list { display: flex; flex-direction: column; }
 
     .post-item {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 0 1.5rem;
-      padding: 1.5rem 0.75rem;
+      display: grid; grid-template-columns: 76px 1fr;
+      gap: 0 1.25rem; padding: 1.25rem 0.6rem;
       border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      color: inherit;
+      text-decoration: none; color: inherit;
       transition: background 0.15s;
-      border-radius: 6px;
-      margin: 0 -0.75rem;
+      border-radius: 6px; margin: 0 -0.6rem;
     }
-
     .post-item:last-child { border-bottom: none; }
     .post-item:hover { background: var(--paper-warm); }
 
     .post-date {
-      font-size: 0.78rem;
-      color: var(--ink-faint);
-      padding-top: 0.2rem;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
+      font-size: 0.75rem; color: var(--ink-faint);
+      padding-top: 0.15rem;
+      font-variant-numeric: tabular-nums; white-space: nowrap;
     }
 
     .post-title {
       font-family: var(--serif);
-      font-size: 1.05rem;
-      font-weight: 400;
-      color: var(--ink);
-      line-height: 1.45;
-      margin-bottom: 0.35rem;
+      font-size: 1rem; font-weight: 400;
+      color: var(--ink); line-height: 1.45; margin-bottom: 0.3rem;
     }
 
-    .post-excerpt {
-      font-size: 0.875rem;
-      color: var(--ink-muted);
-      line-height: 1.6;
-    }
+    .post-excerpt { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.6; }
 
     .post-tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-top: 0.5rem;
+      display: inline-block; font-size: 0.68rem;
+      font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--accent); margin-top: 0.45rem;
     }
 
-    /* PROJECTS */
+    /* ── projects ── */
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
     }
 
     .project-card {
-      background: var(--paper-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.5rem;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      background: var(--paper-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.35rem;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; gap: 0.4rem;
       transition: border-color 0.2s, transform 0.2s;
     }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 
-    .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .project-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .project-icon { font-size: 1.4rem; margin-bottom: 0.2rem; }
 
     .project-name {
       font-family: var(--serif);
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--ink);
+      font-size: 0.95rem; font-weight: 600; color: var(--ink);
     }
 
-    .project-desc {
-      font-size: 0.85rem;
-      color: var(--ink-muted);
-      line-height: 1.6;
-      flex: 1;
-    }
+    .project-desc { font-size: 0.82rem; color: var(--ink-muted); line-height: 1.6; flex: 1; }
 
     .project-stack {
-      font-size: 0.72rem;
-      color: var(--ink-faint);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      margin-top: 0.5rem;
+      font-size: 0.7rem; color: var(--ink-faint);
+      font-weight: 500; letter-spacing: 0.03em; margin-top: 0.4rem;
     }
 
-    /* PUBLICATIONS */
-    .pub-list { display: flex; flex-direction: column; gap: 1.25rem; }
+    /* ── publications ── */
+    .pub-list { display: flex; flex-direction: column; gap: 1rem; }
 
     .pub-item {
-      padding: 1.25rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--paper-card);
+      background: var(--paper-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.1rem 1.25rem;
     }
 
     .pub-title {
       font-family: var(--serif);
-      font-size: 0.95rem;
-      color: var(--ink);
-      line-height: 1.5;
-      margin-bottom: 0.4rem;
+      font-size: 0.92rem; color: var(--ink);
+      line-height: 1.5; margin-bottom: 0.3rem;
     }
 
-    .pub-meta {
-      font-size: 0.8rem;
-      color: var(--ink-muted);
-    }
+    .pub-meta { font-size: 0.78rem; color: var(--ink-muted); }
 
     .pub-link {
-      font-size: 0.78rem;
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid var(--accent-soft);
-      margin-top: 0.4rem;
-      display: inline-block;
+      font-size: 0.75rem; color: var(--accent);
+      text-decoration: none; margin-left: 0.5rem;
     }
 
-    /* NOW */
-    .now-grid {
+    /* ── personal ── */
+    .personal-intro {
+      font-size: 0.95rem; color: var(--ink-muted);
+      line-height: 1.8; max-width: 520px; margin-bottom: 2rem;
+    }
+
+    .placeholder-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
     }
 
-    .now-label {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: 0.5rem;
+    .placeholder-card {
+      background: var(--paper-card); border: 1px dashed var(--border);
+      border-radius: 10px; padding: 1.75rem 1.25rem;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 0.65rem;
     }
 
-    .now-value {
+    .ph-icon { font-size: 1.75rem; }
+
+    .ph-label {
       font-family: var(--serif);
-      font-size: 0.95rem;
-      color: var(--ink);
-      line-height: 1.5;
+      font-size: 0.92rem; color: var(--ink-muted);
     }
 
-    /* FOOTER */
+    .ph-sub { font-size: 0.76rem; color: var(--ink-faint); line-height: 1.5; }
+
+    .coming-badge {
+      font-size: 0.66rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; background: var(--paper-warm);
+      border: 1px solid var(--border); color: var(--ink-faint);
+      padding: 0.18rem 0.55rem; border-radius: 100px;
+    }
+
+    .personal-subsection { margin-bottom: 2rem; }
+
+    .personal-sublabel {
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 1rem;
+    }
+
+    /* ── cv section ── */
+    .breadcrumb {
+      font-size: 0.8rem; color: var(--ink-faint); margin-bottom: 1.25rem;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { margin: 0 0.4rem; }
+
+    .cv-page-title {
+      font-family: var(--serif);
+      font-size: 2rem; font-weight: 600;
+      letter-spacing: -0.02em; color: var(--ink); margin-bottom: 1.5rem;
+    }
+
+    .cv-banner {
+      background: var(--paper-warm); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.9rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap; margin-bottom: 1.75rem;
+    }
+    .cv-banner p { font-size: 0.85rem; color: var(--ink-muted); }
+    .cv-banner strong { color: var(--ink); font-weight: 500; }
+
+    .btn-save {
+      font-size: 0.76rem; font-weight: 500; padding: 0.35rem 0.9rem;
+      border-radius: 100px; background: var(--accent); color: #fff;
+      text-decoration: none; transition: opacity 0.2s; white-space: nowrap;
+    }
+    .btn-save:hover { opacity: 0.85; }
+
+    .pdf-shell {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    .pdf-toolbar {
+      background: #f1ede8; border-bottom: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+
+    .pdf-toolbar-left { display: flex; align-items: center; gap: 0.45rem; }
+
+    .tb-icon {
+      font-size: 0.95rem; color: var(--ink-muted);
+      cursor: default; padding: 0.2rem 0.4rem;
+      border-radius: 4px; transition: background 0.15s; user-select: none;
+    }
+    .tb-icon:hover { background: var(--border); }
+
+    .tb-sep { width: 1px; height: 16px; background: var(--border); }
+
+    .tb-page-indicator {
+      font-size: 0.76rem; color: var(--ink-muted);
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+
+    .tb-page-input {
+      width: 34px; text-align: center; font-size: 0.76rem;
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 0.12rem 0.2rem; color: var(--ink); background: #fff;
+    }
+
+    .pdf-toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 0.45rem; }
+
+    .tb-save-btn {
+      font-size: 0.72rem; font-weight: 500; padding: 0.22rem 0.7rem;
+      border-radius: 100px; background: var(--accent); color: #fff;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .tb-save-btn:hover { opacity: 0.85; }
+
+    .pdf-frame { width: 100%; height: 80vh; border: none; display: block; background: #525659; }
+
+    /* ── about ── */
+    .about-text {
+      font-family: var(--serif);
+      font-size: 1rem; color: var(--ink); line-height: 1.85; max-width: 540px;
+    }
+
+    .about-sub {
+      margin-top: 1rem; font-size: 0.88rem; color: var(--ink-muted);
+      max-width: 540px; line-height: 1.75;
+    }
+
+    .about-email {
+      display: inline-block; margin-top: 1.5rem;
+      font-size: 0.88rem; color: var(--accent);
+      text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 1px;
+    }
+
+    /* ── footer ── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 2.5rem 1.5rem;
+      padding: 2rem 1.5rem;
+      max-width: 1100px; margin: 0 auto;
     }
 
     .footer-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 1rem; flex-wrap: wrap;
+      padding-left: calc(var(--sidebar-w) + 2.5rem);
     }
 
-    .footer-copy { font-size: 0.82rem; color: var(--ink-faint); }
+    .footer-copy { font-size: 0.78rem; color: var(--ink-faint); }
 
     .footer-links { display: flex; gap: 1.25rem; list-style: none; }
-
     .footer-links a {
-      font-size: 0.82rem;
-      color: var(--ink-muted);
-      text-decoration: none;
-      transition: color 0.2s;
+      font-size: 0.78rem; color: var(--ink-muted);
+      text-decoration: none; transition: color 0.2s;
     }
-
     .footer-links a:hover { color: var(--accent); }
 
-    .rule {
-      width: 32px;
-      height: 2px;
-      background: var(--accent);
-      margin-bottom: 1.5rem;
-    }
-
-    @media (max-width: 540px) {
-      .post-item { grid-template-columns: 1fr; gap: 0.25rem; }
-      .post-date { padding-top: 0; }
+    /* ── responsive ── */
+    @media (max-width: 720px) {
+      .left-sidebar { display: none; }
+      .main-content { padding: 2rem 1.25rem 4rem; }
       .nav-links { gap: 1rem; }
+      .footer-inner { padding-left: 0; }
+      .post-item { grid-template-columns: 1fr; gap: 0.2rem; }
+      .pdf-frame { height: 60vh; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- ══ TOP NAV ══ -->
   <nav>
     <div class="nav-inner">
-      <a href="#" class="nav-logo">Xie Jiayu<span>.</span></a>
+      <a href="#home" class="nav-logo">Xie Jiayu<span>.</span></a>
       <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
         <li><a href="#writing">Writing</a></li>
         <li><a href="#projects">Projects</a></li>
-        <li><a href="#publications">Research</a></li>
-        <li><a href="#now">Now</a></li>
-        <li><a href="#about">About</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#personal">Personal</a></li>
         <li><a href="cv.html">CV</a></li>
+        <li><a href="CV___XieJiayuDias.pdf" class="btn-dl" download>↓ Download CV</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <header class="hero">
-    <p class="hero-eyebrow">Digital Journal</p>
-    <h1>Data Engineer &<br /><em>AI Researcher.</em></h1>
-    <p class="hero-bio">
-      I build end-to-end data pipelines, ML models, and integration systems — across industry and academia. Currently focused on Explainable AI research and building tools for public education. This is where I share notes, half-finished ideas, and things I'm working through.
-    </p>
-    <div class="hero-tags">
-      <span class="tag">Explainable AI</span>
-      <span class="tag">Computer Vision</span>
-      <span class="tag">Data Engineering</span>
-      <span class="tag">Robotics</span>
-      <span class="tag">STEM Outreach</span>
-      <span class="tag">Research</span>
-    </div>
-  </header>
+  <!-- ══ PAGE SHELL ══ -->
+  <div class="page-shell">
 
-  <!-- WRITING -->
-  <section id="writing">
-    <p class="section-label">Recent Writing</p>
-    <div class="rule"></div>
-    <div class="post-list">
+    <!-- ── LEFT SIDEBAR ── -->
+    <aside class="left-sidebar">
+      <div class="avatar-wrap">
+        <img src="photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
+      </div>
+      <p class="sidebar-name">Xie Jiayu Dias</p>
+      <p class="sidebar-bio">Data Engineer &amp; AI Researcher. Passionate about Explainable AI, STEM outreach, and building things that make complex ideas accessible.</p>
+      <div class="sidebar-links">
+        <span class="sidebar-link"><span class="icon">📍</span> Knoxville, TN, USA</span>
+        <a href="#home" class="sidebar-link"><span class="icon">🌐</span> Website</a>
+        <a href="https://linkedin.com/in/xie-jiayu" target="_blank" class="sidebar-link"><span class="icon">💼</span> LinkedIn</a>
+        <a href="mailto:jiayuxie95@gmail.com" class="sidebar-link"><span class="icon">✉️</span> Email</a>
+        <a href="cv.html" class="sidebar-link"><span class="icon">📄</span> CV</a>
+      </div>
+    </aside>
 
-      <a href="#" class="post-item">
-        <span class="post-date">Jun 2026</span>
-        <div>
-          <p class="post-title">What Explainable AI actually means — and why it matters now</p>
-          <p class="post-excerpt">A plain-language breakdown of XAI: what interpretability really means, when black-box models fail us, and why I think this is the most important problem in applied AI right now.</p>
-          <span class="post-tag">explainable ai</span>
+    <!-- ── MAIN CONTENT ── -->
+    <main class="main-content">
+
+      <!-- HOME / HERO -->
+      <section id="home">
+        <header class="hero">
+          <p class="hero-eyebrow">Digital Journal</p>
+          <h1>Data Engineer &amp;<br /><em>AI Researcher.</em></h1>
+          <p class="hero-bio">I build end-to-end data pipelines, ML models, and integration systems — across industry and academia. Currently focused on Explainable AI research and building tools for public education. This is where I share notes, half-finished ideas, and things I'm working through.</p>
+          <div class="hero-tags">
+            <span class="tag">Explainable AI</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Data Engineering</span>
+            <span class="tag">Robotics</span>
+            <span class="tag">STEM Outreach</span>
+            <span class="tag">Research</span>
+          </div>
+        </header>
+      </section>
+
+      <!-- WRITING -->
+      <section class="section" id="writing">
+        <p class="section-label">Recent Writing</p>
+        <div class="rule"></div>
+        <div class="post-list">
+          <a href="#" class="post-item">
+            <span class="post-date">Jun 2026</span>
+            <div>
+              <p class="post-title">What Explainable AI actually means — and why it matters now</p>
+              <p class="post-excerpt">A plain-language breakdown of XAI: what interpretability really means, when black-box models fail us, and why I think this is the most important problem in applied AI right now.</p>
+              <span class="post-tag">explainable ai</span>
+            </div>
+          </a>
+          <a href="#" class="post-item">
+            <span class="post-date">May 2026</span>
+            <div>
+              <p class="post-title">How I built data pipelines at ExxonMobil — lessons from three years in the field</p>
+              <p class="post-excerpt">Source-to-target pipelines, Snowflake, dbt, and what I learned from working on data that actually moved millions of dollars.</p>
+              <span class="post-tag">data engineering</span>
+            </div>
+          </a>
+          <a href="#" class="post-item">
+            <span class="post-date">Apr 2026</span>
+            <div>
+              <p class="post-title">Training an agent inside a dream: notes on World Models</p>
+              <p class="post-excerpt">Reading Ha &amp; Schmidhuber's World Models paper through the lens of my own robotics research — the parallels with Kalman filter-based tracking are striking.</p>
+              <span class="post-tag">ml / robotics</span>
+            </div>
+          </a>
+          <a href="#" class="post-item">
+            <span class="post-date">Mar 2026</span>
+            <div>
+              <p class="post-title">Teaching women to code: what I learned running STEM sessions in Brazil</p>
+              <p class="post-excerpt">Reflections from designing training roadmaps and delivering workshops for women in data and programming as part of ExxonMobil's local STEM committee.</p>
+              <span class="post-tag">stem outreach</span>
+            </div>
+          </a>
         </div>
-      </a>
+      </section>
 
-      <a href="#" class="post-item">
-        <span class="post-date">May 2026</span>
-        <div>
-          <p class="post-title">How I built data pipelines at ExxonMobil — lessons from three years in the field</p>
-          <p class="post-excerpt">Source-to-target pipelines, Snowflake, dbt, and what I learned from working on data that actually moved millions of dollars.</p>
-          <span class="post-tag">data engineering</span>
+      <!-- PROJECTS -->
+      <section class="section" id="projects">
+        <p class="section-label">Projects</p>
+        <div class="rule"></div>
+        <div class="project-grid">
+          <a href="#" class="project-card">
+            <div class="project-icon">🧠</div>
+            <p class="project-name">Explainable AI Research</p>
+            <p class="project-desc">Independent research on XAI methods and development of AI-assisted tools designed to make machine learning accessible for public education.</p>
+            <p class="project-stack">Python · ML · AI-assisted tools</p>
+          </a>
+          <a href="#" class="project-card">
+            <div class="project-icon">🤖</div>
+            <p class="project-name">Robotic Substation System</p>
+            <p class="project-desc">Integrated robotic system for electric substations at Lactec. Secured Phase II approval from sponsors with computer vision and ROS.</p>
+            <p class="project-stack">ROS · Computer Vision · Python</p>
+          </a>
+          <a href="#" class="project-card">
+            <div class="project-icon">📊</div>
+            <p class="project-name">Data Reconciliation with ML</p>
+            <p class="project-desc">Partnership R&amp;D project with UFRJ exploring ML-based methods to solve data reconciliation challenges in large corporations.</p>
+            <p class="project-stack">Python · ML · Snowflake · dbt</p>
+          </a>
+          <a href="#" class="project-card">
+            <div class="project-icon">🔬</div>
+            <p class="project-name">Stochastic Models for Robotics</p>
+            <p class="project-desc">Master's thesis: Kalman filter-based tracking for mobile manipulators in ROS and Gazebo. NIST-sponsored research.</p>
+            <p class="project-stack">Matlab · ROS · Gazebo · Kalman Filters</p>
+          </a>
         </div>
-      </a>
+      </section>
 
-      <a href="#" class="post-item">
-        <span class="post-date">Apr 2026</span>
-        <div>
-          <p class="post-title">Training an agent inside a dream: notes on World Models</p>
-          <p class="post-excerpt">Reading Ha & Schmidhuber's World Models paper through the lens of my own robotics research — the parallels with Kalman filter-based tracking are striking.</p>
-          <span class="post-tag">ml / robotics</span>
+      <!-- RESEARCH / PUBLICATIONS -->
+      <section class="section" id="research">
+        <p class="section-label">Research &amp; Publications</p>
+        <div class="rule"></div>
+        <div class="pub-list">
+          <div class="pub-item">
+            <p class="pub-title">Artificial Intelligence-Assisted Methodology for Dataset Reduction Applied to the Establishment of Power Interruption Limits in Brazil</p>
+            <p class="pub-meta">Co-authored · Energies, 2023 <a href="https://www.mdpi.com/1996-1073/16/19/7012" class="pub-link" target="_blank">Read →</a></p>
+          </div>
+          <div class="pub-item">
+            <p class="pub-title">Stochastic Modeling for Mobile Manipulators</p>
+            <p class="pub-meta">Master's Thesis · Marquette University, 2021 <a href="https://epublications.marquette.edu/theses_open/687/" class="pub-link" target="_blank">Read →</a></p>
+          </div>
+          <div class="pub-item">
+            <p class="pub-title">A Monitoring and Management System for Medium-Scale Photovoltaic Plants</p>
+            <p class="pub-meta">Co-authored · IEEE PES ISGT Latin America, 2019</p>
+          </div>
+          <div class="pub-item">
+            <p class="pub-title">Pattern Recognition in Botanical Micro-traces for Forensics Applications using OpenCV</p>
+            <p class="pub-meta">Conference paper · XXIV Congresso Nacional de Criminalística, 2017</p>
+          </div>
+          <div class="pub-item">
+            <p class="pub-title">Optimal Control of Water Flow in an Ice Tray</p>
+            <p class="pub-meta">Conference paper · CNMAC, 2016</p>
+          </div>
         </div>
-      </a>
+      </section>
 
-      <a href="#" class="post-item">
-        <span class="post-date">Mar 2026</span>
-        <div>
-          <p class="post-title">Teaching women to code: what I learned running STEM sessions in Brazil</p>
-          <p class="post-excerpt">Reflections from designing training roadmaps and delivering workshops for women in data and programming as part of ExxonMobil's local STEM committee.</p>
-          <span class="post-tag">stem outreach</span>
+      <!-- PERSONAL -->
+      <section class="section" id="personal">
+        <p class="section-label">Personal</p>
+        <div class="rule"></div>
+        <p class="personal-intro">A space for things that don't fit neatly into research or work — hikes, trips, places I've been, and moments worth remembering. More coming as I get out there.</p>
+
+        <div class="personal-subsection">
+          <p class="personal-sublabel">Hiking &amp; Trails</p>
+          <div class="placeholder-grid">
+            <div class="placeholder-card">
+              <span class="ph-icon">🏔️</span>
+              <p class="ph-label">Trail Reports</p>
+              <p class="ph-sub">Notes, photos and tips from hikes around Tennessee and beyond.</p>
+              <span class="coming-badge">Coming soon</span>
+            </div>
+            <div class="placeholder-card">
+              <span class="ph-icon">🗺️</span>
+              <p class="ph-label">Favourite Routes</p>
+              <p class="ph-sub">A growing map of trails I keep going back to.</p>
+              <span class="coming-badge">Coming soon</span>
+            </div>
+            <div class="placeholder-card">
+              <span class="ph-icon">📸</span>
+              <p class="ph-label">Trail Photos</p>
+              <p class="ph-sub">Moments from the mountain worth keeping.</p>
+              <span class="coming-badge">Coming soon</span>
+            </div>
+          </div>
         </div>
-      </a>
 
-    </div>
-  </section>
+        <div class="personal-subsection">
+          <p class="personal-sublabel">Travel &amp; Trips</p>
+          <div class="placeholder-grid">
+            <div class="placeholder-card">
+              <span class="ph-icon">✈️</span>
+              <p class="ph-label">Places I've Been</p>
+              <p class="ph-sub">From Brazil to the US — places that shaped how I see things.</p>
+              <span class="coming-badge">Coming soon</span>
+            </div>
+            <div class="placeholder-card">
+              <span class="ph-icon">📓</span>
+              <p class="ph-label">Travel Notes</p>
+              <p class="ph-sub">Short reflections from time on the road.</p>
+              <span class="coming-badge">Coming soon</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  <!-- PROJECTS -->
-  <section id="projects">
-    <p class="section-label">Projects</p>
-    <div class="rule"></div>
-    <div class="project-grid">
+      <!-- ABOUT -->
+      <section class="section" id="about">
+        <p class="section-label">About</p>
+        <div class="rule"></div>
+        <p class="about-text">I'm a Data Engineer and AI Researcher with a background in Electronic Engineering and a Master's in Computer Vision from Marquette University. I've built data systems at ExxonMobil, conducted computer vision and robotics R&amp;D at Lactec, and mentored students across data science and engineering.</p>
+        <p class="about-sub">I care deeply about making AI understandable — not just to researchers, but to everyone. Outside of work, I'm passionate about STEM outreach, especially supporting women in data and programming. This journal is where I think out loud.</p>
+        <a href="mailto:jiayuxie95@gmail.com" class="about-email">jiayuxie95@gmail.com</a>
+      </section>
 
-      <a href="#" class="project-card">
-        <div class="project-icon">🧠</div>
-        <p class="project-name">Explainable AI Research</p>
-        <p class="project-desc">Independent research on XAI methods and development of AI-assisted tools designed to make machine learning accessible for public education.</p>
-        <p class="project-stack">Python · ML · AI-assisted tools</p>
-      </a>
+    </main>
+  </div>
 
-      <a href="#" class="project-card">
-        <div class="project-icon">🤖</div>
-        <p class="project-name">Robotic Substation System</p>
-        <p class="project-desc">Delivered a high-value integrated robotic system for electric substations at Lactec. Secured Phase II approval from sponsors with computer vision and ROS.</p>
-        <p class="project-stack">ROS · Computer Vision · Python</p>
-      </a>
-
-      <a href="#" class="project-card">
-        <div class="project-icon">📊</div>
-        <p class="project-name">Data Reconciliation with ML</p>
-        <p class="project-desc">Partnership R&D project with UFRJ exploring ML-based methods to solve data reconciliation challenges in large corporations.</p>
-        <p class="project-stack">Python · ML · Snowflake · dbt</p>
-      </a>
-
-      <a href="#" class="project-card">
-        <div class="project-icon">🔬</div>
-        <p class="project-name">Stochastic Models for Robotics</p>
-        <p class="project-desc">Master's thesis: designed Kalman filter-based tracking algorithms for mobile manipulators, implemented in ROS and Gazebo. NIST-sponsored research.</p>
-        <p class="project-stack">Matlab · ROS · Gazebo · Kalman Filters</p>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- PUBLICATIONS -->
-  <section id="publications">
-    <p class="section-label">Research & Publications</p>
-    <div class="rule"></div>
-    <div class="pub-list">
-
-      <div class="pub-item">
-        <p class="pub-title">Artificial Intelligence-Assisted Methodology for Dataset Reduction Applied to the Establishment of Power Interruption Limits in Brazil</p>
-        <p class="pub-meta">Co-authored · Energies, 2023</p>
-        <a href="https://www.mdpi.com/1996-1073/16/19/7012" class="pub-link" target="_blank">Read paper →</a>
-      </div>
-
-      <div class="pub-item">
-        <p class="pub-title">Stochastic Modeling for Mobile Manipulators</p>
-        <p class="pub-meta">Master's Thesis · Marquette University, 2021</p>
-        <a href="https://epublications.marquette.edu/theses_open/687/" class="pub-link" target="_blank">Read thesis →</a>
-      </div>
-
-      <div class="pub-item">
-        <p class="pub-title">A Monitoring and Management System for Medium-Scale Photovoltaic Plants</p>
-        <p class="pub-meta">Co-authored · IEEE PES ISGT Latin America, 2019</p>
-      </div>
-
-      <div class="pub-item">
-        <p class="pub-title">Pattern Recognition in Botanical Micro-traces for Forensics Applications using OpenCV</p>
-        <p class="pub-meta">Conference paper · XXIV Congresso Nacional de Criminalística, 2017</p>
-      </div>
-
-      <div class="pub-item">
-        <p class="pub-title">Optimal Control of Water Flow in an Ice Tray</p>
-        <p class="pub-meta">Conference paper · CNMAC, 2016</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- NOW -->
-  <section id="now">
-    <p class="section-label">Now</p>
-    <div class="rule"></div>
-    <div class="now-grid">
-      <div class="now-item">
-        <p class="now-label">Working on</p>
-        <p class="now-value">Independent XAI research & AI-assisted education tools</p>
-      </div>
-      <div class="now-item">
-        <p class="now-label">Exploring</p>
-        <p class="now-value">Interpretability methods in modern ML systems</p>
-      </div>
-      <div class="now-item">
-        <p class="now-label">Location</p>
-        <p class="now-value">Knoxville, TN, USA</p>
-      </div>
-      <div class="now-item">
-        <p class="now-label">Languages</p>
-        <p class="now-value">Portuguese · English · Cantonese</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <p class="section-label">About</p>
-    <div class="rule"></div>
-    <p style="font-family: var(--serif); font-size: 1.05rem; color: var(--ink); line-height: 1.85; max-width: 560px;">
-      I'm a Data Engineer and AI Researcher with a background in Electronic Engineering and a Master's in Computer Vision from Marquette University. I've built data systems at ExxonMobil, conducted computer vision and robotics R&D at Lactec, and mentored students across data science and engineering.
-    </p>
-    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--ink-muted); max-width: 560px; line-height: 1.7;">
-      I care deeply about making AI understandable — not just to researchers, but to everyone. Outside of work, I'm passionate about STEM outreach, especially supporting women in data and programming. This journal is where I think out loud.
-    </p>
-    <p style="margin-top: 1.5rem;">
-      <a href="mailto:jiayuxie95@gmail.com" style="font-size: 0.9rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 1px;">
-        jiayuxie95@gmail.com
-      </a>
-    </p>
-  </section>
-
-  <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
       <p class="footer-copy">© 2026 Xie Jiayu Dias. Built with HTML, hosted on GitHub Pages.</p>
       <ul class="footer-links">
         <li><a href="https://linkedin.com/in/xie-jiayu" target="_blank">LinkedIn</a></li>
         <li><a href="mailto:jiayuxie95@gmail.com">Email</a></li>
-        <li><a href="#">RSS</a></li>
+        <li><a href="CV___XieJiayuDias.pdf" download>Download CV</a></li>
       </ul>
     </div>
   </footer>
