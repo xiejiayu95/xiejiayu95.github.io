@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV — Xie Jiayu Dias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1814;
+      --ink-muted: #6b6560;
+      --ink-faint: #b0aa9f;
+      --paper: #faf8f4;
+      --paper-warm: #f3efe8;
+      --accent: #c25c2e;
+      --border: #e4ddd4;
+      --serif: 'Lora', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --max: 900px;
+      --nav-h: 64px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 244, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 500; }
+    .btn-dl {
+      font-size: 0.78rem; font-weight: 500; padding: 0.4rem 1rem;
+      border-radius: 100px; background: var(--accent); color: #fff;
+      text-decoration: none; transition: opacity 0.2s; white-space: nowrap;
+    }
+    .btn-dl:hover { opacity: 0.85; }
+
+    /* ── PAGE CONTENT ── */
+    .page-wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* breadcrumb */
+    .breadcrumb {
+      font-size: 0.82rem;
+      color: var(--ink-faint);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { margin: 0 0.4rem; }
+
+    /* page title */
+    .page-title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── PDF VIEWER CONTAINER ── */
+    .pdf-shell {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    /* fake browser/PDF toolbar */
+    .pdf-toolbar {
+      background: #f1ede8;
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .pdf-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tb-btn {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.6rem;
+      cursor: default;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .tb-sep {
+      width: 1px;
+      height: 18px;
+      background: var(--border);
+    }
+
+    .pdf-toolbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tb-icon {
+      font-size: 1rem;
+      color: var(--ink-muted);
+      cursor: default;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .tb-icon:hover { background: var(--border); }
+
+    .tb-page-indicator {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .tb-page-input {
+      width: 36px;
+      text-align: center;
+      font-size: 0.78rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.15rem 0.25rem;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .tb-download-btn {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .tb-download-btn:hover { opacity: 0.85; }
+
+    /* the actual PDF iframe */
+    .pdf-frame {
+      width: 100%;
+      height: 82vh;
+      border: none;
+      display: block;
+      background: #525659;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+      padding: 2rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 0.78rem; color: var(--ink-faint); }
+    .footer-links { display: flex; gap: 1.25rem; list-style: none; }
+    .footer-links a { font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .nav-links { gap: 0.75rem; }
+      .pdf-frame { height: 70vh; }
+      .pdf-toolbar { gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Xie Jiayu<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html#writing">Writing</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#publications">Research</a></li>
+        <li><a href="index.html#now">Now</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="cv.html" class="active">CV</a></li>
+        <li><a href="CV___XieJiayuDias.pdf" class="btn-dl" download>↓ Download PDF</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE CONTENT -->
+  <div class="page-wrap">
+
+    <!-- Breadcrumb -->
+    <p class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <strong>Curriculum Vitae</strong>
+    </p>
+
+    <!-- Title -->
+    <h1 class="page-title">Curriculum Vitae</h1>
+
+    <!-- PDF Shell -->
+    <div class="pdf-shell">
+
+      <!-- Fake PDF toolbar -->
+      <div class="pdf-toolbar">
+        <div class="pdf-toolbar-left">
+          <span class="tb-icon" title="Contents">☰</span>
+          <div class="tb-sep"></div>
+          <span class="tb-icon" title="Zoom out">−</span>
+          <span class="tb-icon" title="Zoom in">+</span>
+          <span class="tb-icon" title="Fit page">⛶</span>
+          <div class="tb-sep"></div>
+          <div class="tb-page-indicator">
+            <input class="tb-page-input" type="text" value="1" readonly />
+            <span>of 3</span>
+          </div>
+        </div>
+        <div class="pdf-toolbar-right">
+          <span class="tb-icon" title="Search">🔍</span>
+          <span class="tb-icon" title="Print">🖨</span>
+          <a href="CV___XieJiayuDias.pdf" class="tb-download-btn" download>↓ Save</a>
+        </div>
+      </div>
+
+      <!-- Embedded PDF -->
+      <iframe
+        class="pdf-frame"
+        src="CV___XieJiayuDias.pdf"
+        title="Xie Jiayu Dias — Curriculum Vitae"
+      ></iframe>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-copy">© 2026 Xie Jiayu Dias. Built with HTML, hosted on GitHub Pages.</p>
+      <ul class="footer-links">
+        <li><a href="https://linkedin.com/in/xie-jiayu" target="_blank">LinkedIn</a></li>
+        <li><a href="mailto:jiayuxie95@gmail.com">Email</a></li>
+        <li><a href="CV___XieJiayuDias.pdf" download>Download PDF</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>
