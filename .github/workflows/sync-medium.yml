@@ -1,0 +1,34 @@
+name: Sync Medium Posts
+
+on:
+  schedule:
+    # Runs every day at 8am UTC — adjust if you prefer a different time
+    - cron: '0 8 * * *'
+  workflow_dispatch:  # also lets you trigger it manually from GitHub
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests feedparser
+
+      - name: Run Medium sync script
+        run: python scripts/sync_medium.py
+
+      - name: Commit and push if anything changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "chore: sync Medium posts [skip ci]"
+          git push
