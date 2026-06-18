@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ✏️ EDIT: Change this to your post title -->
+  <title>{{ title }} — Xie Jiayu Dias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1814;
+      --ink-muted: #6b6560;
+      --ink-faint: #b0aa9f;
+      --paper: #faf8f4;
+      --paper-warm: #f3efe8;
+      --paper-card: #fff;
+      --accent: #c25c2e;
+      --accent-soft: #f0e4da;
+      --border: #e4ddd4;
+      --serif: 'Lora', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --nav-h: 64px;
+      --sidebar-w: 200px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══ TOP NAV — identical to index.html ══ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: var(--nav-h);
+      background: rgba(250,248,244,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+
+    .nav-inner {
+      width: 100%; max-width: 1100px;
+      margin: 0 auto; padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem; color: var(--ink);
+      text-decoration: none; letter-spacing: -0.01em;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 1.6rem; list-style: none; align-items: center; }
+
+    .nav-links a {
+      font-size: 0.86rem; color: var(--ink-muted);
+      text-decoration: none; letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 500; }
+
+    .btn-dl {
+      font-size: 0.78rem; font-weight: 500;
+      padding: 0.35rem 1rem; border-radius: 100px;
+      background: var(--accent); color: #fff;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .btn-dl:hover { opacity: 0.85; }
+
+    /* ══ PAGE SHELL ══ */
+    .page-shell {
+      display: flex;
+      padding-top: var(--nav-h);
+      min-height: 100vh;
+    }
+
+    /* ══ LEFT SIDEBAR — identical to index.html ══ */
+    .left-sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      padding: 2rem 1.25rem 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+      background: var(--paper);
+      z-index: 10;
+    }
+
+    .avatar-wrap {
+      width: 84px; height: 84px;
+      border-radius: 50%; overflow: hidden;
+      margin-bottom: 1rem;
+      border: 2px solid var(--border);
+      background: var(--paper-warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    .sidebar-name {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--ink); margin-bottom: 0.45rem;
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-bio {
+      font-size: 0.8rem; color: var(--ink-muted);
+      line-height: 1.6; margin-bottom: 1.4rem;
+    }
+
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .sidebar-link {
+      display: flex; align-items: center; gap: 0.55rem;
+      font-size: 0.8rem; color: var(--ink-muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .sidebar-link:hover { color: var(--accent); }
+    .sidebar-link .icon {
+      width: 16px; text-align: center;
+      font-size: 0.85rem; flex-shrink: 0;
+    }
+
+    /* ══ ARTICLE MAIN ══ */
+    .main-content {
+      flex: 1; min-width: 0;
+      padding: 3.5rem 2.5rem 6rem;
+      max-width: 740px;  /* narrower than index for comfortable reading */
+    }
+
+    /* breadcrumb */
+    .breadcrumb {
+      font-size: 0.8rem; color: var(--ink-faint);
+      margin-bottom: 2rem;
+      display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* post header */
+    .post-header { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+
+    .post-eyebrow {
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+
+    .post-eyebrow-sep { color: var(--border); }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 600; line-height: 1.2;
+      letter-spacing: -0.02em; color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .post-subtitle {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-style: italic;
+      color: var(--ink-muted); line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-meta {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .post-author {
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .author-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%; overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--paper-warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; flex-shrink: 0;
+    }
+    .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .author-name { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+
+    .meta-sep { color: var(--border); font-size: 1rem; }
+
+    .post-date-meta { font-size: 0.82rem; color: var(--ink-faint); }
+    .post-read-time { font-size: 0.82rem; color: var(--ink-faint); }
+
+    .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.25rem; }
+
+    .tag {
+      font-size: 0.72rem; font-weight: 500;
+      padding: 0.25rem 0.65rem; border-radius: 100px;
+      background: var(--paper-warm); color: var(--ink-muted);
+      border: 1px solid var(--border); letter-spacing: 0.02em;
+    }
+
+    /* ── article body ── */
+    .post-body { font-size: 1rem; color: var(--ink); line-height: 1.85; }
+
+    /* lead paragraph */
+    .post-body .lead {
+      font-family: var(--serif);
+      font-size: 1.15rem; color: var(--ink-muted);
+      line-height: 1.8; margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    /* regular paragraphs */
+    .post-body p { margin-bottom: 1.5rem; }
+
+    /* headings inside post */
+    .post-body h2 {
+      font-family: var(--serif);
+      font-size: 1.4rem; font-weight: 600;
+      letter-spacing: -0.01em; color: var(--ink);
+      margin: 2.5rem 0 1rem;
+      padding-top: 0.5rem;
+    }
+
+    .post-body h3 {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--ink); margin: 2rem 0 0.75rem;
+    }
+
+    /* pull quote / callout */
+    .post-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      margin: 2rem 0;
+      background: var(--accent-soft);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .post-body blockquote p {
+      font-family: var(--serif);
+      font-size: 1.05rem; font-style: italic;
+      color: var(--ink); margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* callout box */
+    .callout {
+      background: var(--paper-warm);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+
+    .callout-label {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.5rem;
+    }
+
+    /* inline code */
+    .post-body code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.88rem;
+      background: var(--paper-warm);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      color: var(--accent);
+    }
+
+    /* code block */
+    .post-body pre {
+      background: #1e1c18;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 2rem 0;
+    }
+
+    .post-body pre code {
+      background: none; border: none; padding: 0;
+      color: #e8e0d0; font-size: 0.85rem; line-height: 1.6;
+    }
+
+    /* lists */
+    .post-body ul, .post-body ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-body li { margin-bottom: 0.4rem; }
+
+    /* horizontal divider */
+    .post-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* image */
+    .post-body figure { margin: 2.5rem 0; }
+
+    .post-body figure img {
+      width: 100%; border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .post-body figcaption {
+      font-size: 0.78rem; color: var(--ink-faint);
+      text-align: center; margin-top: 0.6rem;
+      font-style: italic;
+    }
+
+    /* ── post footer ── */
+    .post-footer {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .post-footer-label {
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 1.25rem;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.88rem; color: var(--accent);
+      text-decoration: none; border-bottom: 1px solid var(--accent-soft);
+      padding-bottom: 1px; transition: border-color 0.2s;
+    }
+    .back-link:hover { border-color: var(--accent); }
+
+    /* ── footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+    }
+
+    .footer-inner {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 1rem; flex-wrap: wrap;
+      padding-left: 1rem;
+    }
+
+    .footer-copy { font-size: 0.78rem; color: var(--ink-faint); }
+    .footer-links { display: flex; gap: 1.25rem; list-style: none; }
+    .footer-links a {
+      font-size: 0.78rem; color: var(--ink-muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── responsive ── */
+    @media (max-width: 600px) {
+      .left-sidebar { display: none; }
+      .main-content { padding: 2rem 1.25rem 4rem; max-width: 100%; }
+      .nav-links { gap: 0.6rem; }
+      .nav-links a { font-size: 0.78rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ TOP NAV ══ -->
+  <nav>
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">Xie Jiayu<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="../index.html#home">Home</a></li>
+        <li><a href="../index.html#writing" class="active">Writing</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#research">Research</a></li>
+        <li><a href="../index.html#personal">Personal</a></li>
+        <li><a href="../cv.html">CV</a></li>
+        <li><a href="../CV___XieJiayuDias.pdf" class="btn-dl" download>↓ Download CV</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══ PAGE SHELL ══ -->
+  <div class="page-shell">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="left-sidebar">
+      <div class="avatar-wrap">
+        <img src="../photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
+      </div>
+      <p class="sidebar-name">Xie Jiayu Dias</p>
+      <p class="sidebar-bio">Data Engineer &amp; AI Researcher. Passionate about Explainable AI, STEM outreach, and building things that make complex ideas accessible.</p>
+      <div class="sidebar-links">
+        <span class="sidebar-link"><span class="icon">📍</span> Knoxville, TN, USA</span>
+        <a href="../index.html" class="sidebar-link"><span class="icon">🌐</span> Website</a>
+        <a href="https://linkedin.com/in/xie-jiayu" target="_blank" class="sidebar-link"><span class="icon">💼</span> LinkedIn</a>
+        <a href="mailto:jiayuxie95@gmail.com" class="sidebar-link"><span class="icon">✉️</span> Email</a>
+        <a href="../cv.html" class="sidebar-link"><span class="icon">📄</span> CV</a>
+        <a href="https://medium.com/@jiayuxie95" target="_blank" class="sidebar-link"><span class="icon">✍️</span> Medium</a>
+      </div>
+    </aside>
+
+    <!-- ══ ARTICLE ══ -->
+    <main class="main-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#writing">Writing</a>
+        <span>/</span>
+<strong>{{ title }}</strong>
+      </nav>
+
+      <!-- Post Header -->
+      <header class="post-header">
+
+        <p class="post-eyebrow">
+          <span>{{ category }}</span>
+          <span class="post-eyebrow-sep">·</span>
+          <span>{{ month_year }}</span>
+        </p>
+
+        <h1 class="post-title">{{ title }}</h1>
+
+        {% if subtitle %}<p class="post-subtitle">{{ subtitle }}</p>{% endif %}
+
+        <!-- Author + meta -->
+        <div class="post-meta">
+          <div class="post-author">
+            <div class="author-avatar">
+              <img src="../photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
+            </div>
+            <span class="author-name">Xie Jiayu Dias</span>
+          </div>
+          <span class="meta-sep">·</span>
+          <span class="post-date-meta">{{ full_date }}</span>
+          <span class="meta-sep">·</span>
+          <span class="post-read-time">{{ read_time }} min read</span>
+        </div>
+
+        <div class="post-tags">
+          {% for t in tags %}<span class="tag">{{ t }}</span>{% endfor %}
+        </div>
+
+      </header>
+
+      <!-- ══ POST BODY ══ -->
+      <article class="post-body">
+{{ body_html | safe }}
+      </article>
+
+      <!-- Post Footer -->
+      <div class="post-footer">
+        <p class="post-footer-label">More Writing</p>
+        <a href="../index.html#writing" class="back-link">← Back to all posts</a>
+        {% if medium_url %}<p style="margin-top:0.75rem;"><a href="{{ medium_url }}" target="_blank" rel="noopener" class="back-link">Originally published on Medium ↗</a></p>{% endif %}
+      </div>
+
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-copy">© 2026 Xie Jiayu Dias. Built with HTML, hosted on GitHub Pages.</p>
+      <ul class="footer-links">
+        <li><a href="https://linkedin.com/in/xie-jiayu" target="_blank">LinkedIn</a></li>
+        <li><a href="mailto:jiayuxie95@gmail.com">Email</a></li>
+        <li><a href="../CV___XieJiayuDias.pdf" download>Download CV</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>
