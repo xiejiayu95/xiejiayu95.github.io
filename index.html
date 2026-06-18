@@ -142,6 +142,7 @@
       flex: 1; min-width: 0;
       padding: 3.5rem 2.5rem 6rem;
       max-width: 860px;
+      margin: 0 auto;
     }
 
     /* ── hero ── */
@@ -432,14 +433,66 @@
     }
     .footer-links a:hover { color: var(--accent); }
 
+    /* ── hamburger button (mobile only) ── */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: none; border: none;
+      cursor: pointer; padding: 4px;
+      border-radius: 6px;
+    }
+    .nav-toggle span {
+      display: block; height: 2px; width: 22px;
+      background: var(--ink); border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
     /* ── responsive ── */
-    @media (max-width: 500px) {
+    @media (max-width: 768px) {
       .left-sidebar { display: none; }
-      .main-content { padding: 2rem 1.25rem 4rem; }
-      .nav-links { gap: 1rem; }
-      .footer-inner { padding-left: 0; }
+      .main-content { padding: 2rem 1.25rem 4rem; max-width: 100%; margin: 0; }
+      .footer-inner { padding-left: 0; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
       .post-item { grid-template-columns: 1fr; gap: 0.2rem; }
       .pdf-frame { height: 60vh; }
+
+      /* hamburger visible */
+      .nav-toggle { display: flex; }
+
+      /* nav links become a dropdown panel */
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: rgba(250,248,244,0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 0.1rem;
+        z-index: 199;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block;
+        font-size: 0.95rem;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links li:last-child a { border-bottom: none; }
+      .btn-dl {
+        display: inline-block;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        padding: 0.5rem 1.2rem;
+      }
     }
   </style>
 </head>
@@ -449,7 +502,10 @@
   <nav>
     <div class="nav-inner">
       <a href="#home" class="nav-logo">Xie Jiayu Dias<span>.</span></a>
-      <ul class="nav-links">
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
         <li><a href="#home">Home</a></li>
         <li><a href="#writing">Writing</a></li>
         <li><a href="#projects">Projects</a></li>
@@ -667,5 +723,19 @@
     </div>
   </footer>
 
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+    });
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      links.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', false);
+    }));
+  </script>
 </body>
 </html>

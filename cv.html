@@ -200,17 +200,51 @@
       min-height: 0;
     }
 
+    /* ── mobile top bar (hidden on desktop) ── */
+    .mobile-topbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--paper);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .mobile-topbar a {
+      font-size: 0.85rem; color: var(--accent);
+      text-decoration: none; font-weight: 500;
+    }
+    .mobile-topbar-title {
+      font-family: var(--serif);
+      font-size: 1rem; color: var(--ink);
+    }
+    .mobile-topbar-dl {
+      font-size: 0.78rem; font-weight: 500;
+      padding: 0.3rem 0.8rem; border-radius: 100px;
+      background: var(--accent); color: #fff;
+      text-decoration: none;
+    }
+
     /* ── responsive ── */
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .shell { flex-direction: column; height: auto; overflow: visible; }
-      .left-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      .left-sidebar { display: none; }
+      .mobile-topbar { display: flex; }
       .right-content { height: auto; overflow-y: visible; }
-      .pdf-wrapper { margin: 0 1rem 2rem; height: 70vh; }
-      .breadcrumb-bar, .page-title { padding-left: 1rem; padding-right: 1rem; }
+      .pdf-wrapper { margin: 0 1rem 2rem; height: 75vh; }
+      .breadcrumb-bar { display: none; }
+      .page-title { padding: 1rem 1.25rem 1rem; font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
+
+<!-- mobile top bar (only visible on small screens) -->
+<div class="mobile-topbar">
+  <a href="index.html">← Home</a>
+  <span class="mobile-topbar-title">Curriculum Vitae</span>
+  <a href="CV___XieJiayuDias.pdf" class="mobile-topbar-dl" download>↓ Save</a>
+</div>
 
 <div class="shell">
 
