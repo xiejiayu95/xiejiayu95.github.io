@@ -225,13 +225,54 @@
       text-decoration: none;
     }
 
+    /* ── mobile PDF fallback card ── */
+    .mobile-pdf-fallback {
+      display: none;
+      margin: 0 1.25rem 2.5rem;
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .mobile-pdf-fallback .pdf-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .mobile-pdf-fallback h2 {
+      font-family: var(--serif);
+      font-size: 1.2rem; color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .mobile-pdf-fallback p {
+      font-size: 0.88rem; color: var(--ink-muted);
+      line-height: 1.6; margin-bottom: 1.75rem;
+    }
+    .mobile-pdf-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+    .btn-open-pdf {
+      display: block; padding: 0.8rem 1.25rem;
+      background: var(--accent); color: #fff;
+      border-radius: 100px; text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .btn-open-pdf:hover { opacity: 0.85; }
+    .btn-dl-pdf {
+      display: block; padding: 0.75rem 1.25rem;
+      background: var(--paper-warm);
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+      border-radius: 100px; text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: border-color 0.2s;
+    }
+    .btn-dl-pdf:hover { border-color: var(--accent); color: var(--ink); }
+
     /* ── responsive ── */
     @media (max-width: 768px) {
       .shell { flex-direction: column; height: auto; overflow: visible; }
       .left-sidebar { display: none; }
       .mobile-topbar { display: flex; }
       .right-content { height: auto; overflow-y: visible; }
-      .pdf-wrapper { margin: 0 1rem 2rem; height: 75vh; }
+      .pdf-wrapper { display: none; }
+      .mobile-pdf-fallback { display: block; }
       .breadcrumb-bar { display: none; }
       .page-title { padding: 1rem 1.25rem 1rem; font-size: 1.5rem; }
     }
@@ -318,6 +359,17 @@
         src="CV___XieJiayuDias.pdf"
         title="Xie Jiayu Dias — Curriculum Vitae"
       ></iframe>
+    </div>
+
+    <!-- mobile fallback: PDF iframe doesn't work on mobile browsers -->
+    <div class="mobile-pdf-fallback">
+      <div class="pdf-icon">📄</div>
+      <h2>Curriculum Vitae</h2>
+      <p>PDF previews aren't supported on mobile browsers. You can open it directly or save it to your device.</p>
+      <div class="mobile-pdf-actions">
+        <a href="CV___XieJiayuDias.pdf" class="btn-open-pdf" target="_blank" rel="noopener">Open CV →</a>
+        <a href="CV___XieJiayuDias.pdf" class="btn-dl-pdf" download>↓ Download CV</a>
+      </div>
     </div>
 
   </div><!-- end right-content -->
