@@ -12,7 +12,7 @@ Fetches posts from Xie Jiayu's Medium RSS feed and:
 Run locally:  python scripts/sync_medium.py
 Run via CI:   triggered automatically by .github/workflows/sync-medium.yml
 
-Requires: feedparser, jinja2  (pip install feedparser jinja2)
+Requires: feedparser, jinja2, requests  (pip install feedparser jinja2 requests)
 """
 
 import os
@@ -22,6 +22,7 @@ import textwrap
 from datetime import datetime
 
 import feedparser
+import requests
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 # ── Config ────────────────────────────────────────────────────────────────────
@@ -159,7 +160,18 @@ def main():
     os.makedirs(POSTS_DIR, exist_ok=True)
 
     print(f"Fetching {MEDIUM_RSS} …")
-    feed = feedparser.parse(MEDIUM_RSS)
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (compatible; RSS-bot/1.0; "
+            "+https://github.com/xiejiayu95/xiejiayu95.github.io)"
+        )
+    }
+    response = requests.get(MEDIUM_RSS, headers=headers, timeout=30)
+    if response.status_code != 200:
+        raise RuntimeError(
+            f"Failed to fetch Medium RSS feed: HTTP {response.status_code}"
+        )
+    feed = feedparser.parse(response.content)
 
     if feed.bozo:
         print(f"⚠️  Feed parse warning: {feed.bozo_exception}")
