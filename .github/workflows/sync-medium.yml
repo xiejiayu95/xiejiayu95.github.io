@@ -29,7 +29,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html posts/
+          git add index.html writing.html posts/
           git diff --cached --quiet && exit 0
           git commit -m "chore: sync Medium posts [skip ci]"
           git pull --rebase origin main

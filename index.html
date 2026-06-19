@@ -192,6 +192,16 @@
 
     .rule { width: 28px; height: 2px; background: var(--accent); margin-bottom: 1.5rem; }
 
+    /* ── view all link ── */
+    .view-all {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.85rem; color: var(--accent);
+      text-decoration: none; margin-top: 1.25rem;
+      border-bottom: 1px solid var(--accent-soft);
+      padding-bottom: 1px; transition: border-color 0.2s;
+    }
+    .view-all:hover { border-color: var(--accent); }
+
     /* ── posts ── */
     .post-list { display: flex; flex-direction: column; }
 
@@ -507,10 +517,10 @@
       </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="#home">Home</a></li>
-        <li><a href="#writing">Writing</a></li>
+        <li><a href="writing.html">Writing</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#research">Research</a></li>
-        <li><a href="#personal">Personal</a></li>
+        <li><a href="personal.html">Personal</a></li>
         <li><a href="cv.html">CV</a></li>
         <li><a href="CV___XieJiayuDias.pdf" class="btn-dl" download>↓ Download CV</a></li>
       </ul>
@@ -589,6 +599,7 @@
 </a>
           <!-- MEDIUM_POSTS_END -->
         </div>
+        <a href="writing.html" class="view-all">All posts →</a>
       </section>
 
       <!-- PROJECTS -->
@@ -655,7 +666,6 @@
       <section class="section" id="personal">
         <p class="section-label">Personal</p>
         <div class="rule"></div>
-        <p class="personal-intro">A space for things that don't fit neatly into research or work — hikes, trips, places I've been, and moments worth remembering. More coming as I get out there.</p>
 
         <div class="post-list">
 
@@ -686,25 +696,8 @@
             </div>
           </div>
 
-          <div class="post-item" style="cursor: default; opacity: 0.75;">
-            <span class="post-date">✈️</span>
-            <div>
-              <p class="post-title">Places I've Been</p>
-              <p class="post-excerpt">From Brazil to the US — places that shaped how I see things.</p>
-              <span class="post-tag">coming soon</span>
-            </div>
-          </div>
-
-          <div class="post-item" style="cursor: default; opacity: 0.75;">
-            <span class="post-date">📓</span>
-            <div>
-              <p class="post-title">Travel Notes</p>
-              <p class="post-excerpt">Short reflections from time on the road.</p>
-              <span class="post-tag">coming soon</span>
-            </div>
-          </div>
-
         </div>
+        <a href="personal.html" class="view-all">All personal posts →</a>
       </section>
 
       <!-- ABOUT -->

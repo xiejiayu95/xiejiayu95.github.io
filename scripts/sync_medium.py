@@ -28,10 +28,12 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 # ── Config ────────────────────────────────────────────────────────────────────
 MEDIUM_RSS    = "https://medium.com/feed/@jiayuxie95"
 INDEX_FILE    = "index.html"
+WRITING_FILE  = "writing.html"
 POSTS_DIR     = "posts"
 TEMPLATE_DIR  = "scripts/templates"
 TEMPLATE_FILE = "post_template.html"
-MAX_POSTS     = 12       # how many posts to process / show
+MAX_POSTS     = 12       # how many posts to fetch from Medium
+INDEX_PREVIEW = 3        # how many posts to show on index.html
 EXCERPT_LEN   = 160      # homepage card excerpt length
 WORDS_PER_MIN = 220      # used to estimate read time
 
@@ -227,16 +229,31 @@ def main():
         # ── Build the homepage card (links to the LOCAL page) ──
         cards.append(build_card_html(title, slug, dates["card_date"], excerpt, category))
 
-    # ── Update index.html Writing section ──
+    # ── Update writing.html with ALL posts ──
+    _update_html_markers(
+        WRITING_FILE, cards,
+        label=f"all {len(cards)} post(s)"
+    )
+
+    # ── Update index.html with latest 3 posts only ──
+    _update_html_markers(
+        INDEX_FILE, cards[:INDEX_PREVIEW],
+        label=f"latest {INDEX_PREVIEW} post(s)"
+    )
+
+    print(f"{len(entries)} full post page(s) written to /{POSTS_DIR}/")
+
+
+def _update_html_markers(filepath, cards, label=""):
     posts_html = "\n".join(cards)
     replacement = f"{START_MARKER}\n{posts_html}\n          {END_MARKER}"
 
-    with open(INDEX_FILE, "r", encoding="utf-8") as f:
+    with open(filepath, "r", encoding="utf-8") as f:
         content = f.read()
 
     if START_MARKER not in content or END_MARKER not in content:
         print(
-            f"Markers not found in {INDEX_FILE}.\n"
+            f"Markers not found in {filepath}.\n"
             f"Add these two comments inside your .post-list div:\n"
             f"  {START_MARKER}\n"
             f"  {END_MARKER}"
@@ -247,14 +264,13 @@ def main():
     new_content, count = re.subn(pattern, replacement, content, flags=re.DOTALL)
 
     if count == 0:
-        print("Regex replacement failed — index.html left unchanged.")
+        print(f"Regex replacement failed — {filepath} left unchanged.")
         return
 
-    with open(INDEX_FILE, "w", encoding="utf-8") as f:
+    with open(filepath, "w", encoding="utf-8") as f:
         f.write(new_content)
 
-    print(f"Done. {INDEX_FILE} updated with {len(entries)} post card(s).")
-    print(f"{len(entries)} full post page(s) written to /{POSTS_DIR}/")
+    print(f"  updated {filepath} with {label}.")
 
 
 if __name__ == "__main__":
