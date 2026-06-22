@@ -161,7 +161,13 @@
       max-width: 520px;
     }
 
-    .rule { width: 28px; height: 2px; background: var(--accent); margin-bottom: 2rem; }
+    .rule { width: 28px; height: 2px; background: var(--accent); margin-bottom: 1.5rem; }
+
+    .section-label {
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 1rem;
+    }
 
     /* posts */
     .post-list { display: flex; flex-direction: column; }
@@ -296,9 +302,11 @@
       </nav>
 
       <h1 class="page-title">Writing</h1>
-      <p class="page-subtitle">Essays and notes on AI, technology, and the world. Originally published on Medium.</p>
+      <p class="page-subtitle">Essays, notes, and book reviews. Originally published on Medium.</p>
       <div class="rule"></div>
 
+      <!-- ── Technical Articles ── -->
+      <p class="section-label">Technical Articles</p>
       <div class="post-list">
         <!-- MEDIUM_POSTS_START -->
 <a href="posts/what-i-learned-using-agentic-ai-tools-to-develop-an-app.html" class="post-item">
@@ -326,6 +334,19 @@
   </div>
 </a>
         <!-- MEDIUM_POSTS_END -->
+      </div>
+
+      <!-- ── Book Reviews ── -->
+      <p class="section-label" style="margin-top: 3rem;">Book Reviews</p>
+      <div class="post-list">
+        <div class="post-item" style="cursor: default; opacity: 0.75;">
+          <span class="post-date">—</span>
+          <div>
+            <p class="post-title">First review coming soon</p>
+            <p class="post-excerpt">Book reviews and reading notes will appear here.</p>
+            <span class="post-tag">coming soon</span>
+          </div>
+        </div>
       </div>
 
     </main>
