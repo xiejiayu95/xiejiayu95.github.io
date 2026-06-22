@@ -1,13 +1,12 @@
 """
 sync_medium.py
 --------------
-Fetches posts from Xie Jiayu's Medium RSS feed and:
+Fetches posts from Xie Jiayu's Medium and Substack RSS feeds and:
 
   1. Renders a FULL standalone article page for each post into /posts/<slug>.html,
      using the site's own design (same nav, sidebar, fonts, colors).
-  2. Updates the Writing section of index.html with cards that link to those
-     local pages (not to Medium) — with a "Originally published on Medium"
-     link kept inside each post page for attribution.
+  2. Updates writing.html with all posts (per source, between their own markers).
+  3. Updates index.html with only the latest 3 Medium posts.
 
 Run locally:  python scripts/sync_medium.py
 Run via CI:   triggered automatically by .github/workflows/sync-medium.yml
@@ -27,18 +26,25 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 # ── Config ────────────────────────────────────────────────────────────────────
 MEDIUM_RSS    = "https://medium.com/feed/@jiayuxie95"
+SUBSTACK_RSS  = "https://xiedias.substack.com/feed"
 INDEX_FILE    = "index.html"
 WRITING_FILE  = "writing.html"
 POSTS_DIR     = "posts"
 TEMPLATE_DIR  = "scripts/templates"
 TEMPLATE_FILE = "post_template.html"
-MAX_POSTS     = 12       # how many posts to fetch from Medium
-INDEX_PREVIEW = 3        # how many posts to show on index.html
-EXCERPT_LEN   = 160      # homepage card excerpt length
+MAX_POSTS     = 12       # how many posts to fetch per source
+INDEX_PREVIEW = 3        # how many Medium posts to show on index.html
+EXCERPT_LEN   = 160      # card excerpt length
 WORDS_PER_MIN = 220      # used to estimate read time
 
-START_MARKER = "<!-- MEDIUM_POSTS_START -->"
-END_MARKER   = "<!-- MEDIUM_POSTS_END -->"
+MEDIUM_START    = "<!-- MEDIUM_POSTS_START -->"
+MEDIUM_END      = "<!-- MEDIUM_POSTS_END -->"
+SUBSTACK_START  = "<!-- SUBSTACK_POSTS_START -->"
+SUBSTACK_END    = "<!-- SUBSTACK_POSTS_END -->"
+
+# keep old names as aliases so _update_html_markers still works for index.html
+START_MARKER = MEDIUM_START
+END_MARKER   = MEDIUM_END
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -156,47 +162,42 @@ def build_card_html(title, slug, date_str, excerpt, tag) -> str:
           </a>""")
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+# ── Feed fetcher ──────────────────────────────────────────────────────────────
 
-def main():
-    os.makedirs(POSTS_DIR, exist_ok=True)
+_HTTP_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (compatible; RSS-bot/1.0; "
+        "+https://github.com/xiejiayu95/xiejiayu95.github.io)"
+    )
+}
 
-    print(f"Fetching {MEDIUM_RSS} …")
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (compatible; RSS-bot/1.0; "
-            "+https://github.com/xiejiayu95/xiejiayu95.github.io)"
-        )
-    }
-    response = requests.get(MEDIUM_RSS, headers=headers, timeout=30)
+
+def fetch_feed(url: str):
+    print(f"Fetching {url} …")
+    response = requests.get(url, headers=_HTTP_HEADERS, timeout=30)
     if response.status_code != 200:
-        raise RuntimeError(
-            f"Failed to fetch Medium RSS feed: HTTP {response.status_code}"
-        )
+        raise RuntimeError(f"Failed to fetch RSS feed {url}: HTTP {response.status_code}")
     feed = feedparser.parse(response.content)
-
     if feed.bozo:
         print(f"⚠️  Feed parse warning: {feed.bozo_exception}")
+    return feed
 
+
+def sync_feed(rss_url, source_label, template, env):
+    """Fetch one RSS feed, render post pages, return list of card HTML strings."""
+    feed = fetch_feed(rss_url)
     entries = feed.entries[:MAX_POSTS]
     if not entries:
-        print("No entries found — nothing to do.")
-        return
+        print(f"  No entries found for {source_label}.")
+        return []
 
-    print(f"Found {len(entries)} post(s) on Medium.")
-
-    env = Environment(
-        loader=FileSystemLoader(TEMPLATE_DIR),
-        autoescape=select_autoescape(disabled_extensions=("html",)),
-    )
-    template = env.get_template(TEMPLATE_FILE)
-
+    print(f"  Found {len(entries)} post(s) from {source_label}.")
     cards = []
 
     for entry in entries:
         title = entry.get("title", "Untitled")
         slug = slugify(title)
-        medium_url = entry.get("link", "#")
+        source_url = entry.get("link", "#")
 
         dates = get_dates(entry)
         tags = make_tags(entry)
@@ -208,7 +209,6 @@ def main():
         read_time = estimate_read_time(plain_text)
         excerpt = make_excerpt(entry)
 
-        # ── Render the full standalone post page ──
         rendered = template.render(
             title=title,
             subtitle=None,
@@ -218,49 +218,75 @@ def main():
             read_time=read_time,
             tags=tags,
             body_html=body_html,
-            medium_url=medium_url,
+            medium_url=source_url,
         )
 
         out_path = os.path.join(POSTS_DIR, f"{slug}.html")
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(rendered)
-        print(f"  wrote {out_path}")
+        print(f"    wrote {out_path}")
 
-        # ── Build the homepage card (links to the LOCAL page) ──
         cards.append(build_card_html(title, slug, dates["card_date"], excerpt, category))
 
-    # ── Update writing.html with ALL posts ──
-    _update_html_markers(
-        WRITING_FILE, cards,
-        label=f"all {len(cards)} post(s)"
+    return cards
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    os.makedirs(POSTS_DIR, exist_ok=True)
+
+    env = Environment(
+        loader=FileSystemLoader(TEMPLATE_DIR),
+        autoescape=select_autoescape(disabled_extensions=("html",)),
     )
+    template = env.get_template(TEMPLATE_FILE)
 
-    # ── Update index.html with latest 3 posts only ──
-    _update_html_markers(
-        INDEX_FILE, cards[:INDEX_PREVIEW],
-        label=f"latest {INDEX_PREVIEW} post(s)"
-    )
+    # ── Medium ──
+    medium_cards = sync_feed(MEDIUM_RSS, "Medium", template, env)
 
-    print(f"{len(entries)} full post page(s) written to /{POSTS_DIR}/")
+    if medium_cards:
+        _update_html_markers(
+            WRITING_FILE, medium_cards,
+            start=MEDIUM_START, end=MEDIUM_END,
+            label=f"all {len(medium_cards)} Medium post(s)"
+        )
+        _update_html_markers(
+            INDEX_FILE, medium_cards[:INDEX_PREVIEW],
+            start=MEDIUM_START, end=MEDIUM_END,
+            label=f"latest {INDEX_PREVIEW} Medium post(s)"
+        )
+
+    # ── Substack ──
+    substack_cards = sync_feed(SUBSTACK_RSS, "Substack", template, env)
+
+    if substack_cards:
+        _update_html_markers(
+            WRITING_FILE, substack_cards,
+            start=SUBSTACK_START, end=SUBSTACK_END,
+            label=f"all {len(substack_cards)} Substack post(s)"
+        )
+
+    print("Sync complete.")
 
 
-def _update_html_markers(filepath, cards, label=""):
+def _update_html_markers(filepath, cards, start=MEDIUM_START, end=MEDIUM_END, label=""):
     posts_html = "\n".join(cards)
-    replacement = f"{START_MARKER}\n{posts_html}\n          {END_MARKER}"
+    replacement = f"{start}\n{posts_html}\n        {end}"
 
     with open(filepath, "r", encoding="utf-8") as f:
         content = f.read()
 
-    if START_MARKER not in content or END_MARKER not in content:
+    if start not in content or end not in content:
         print(
             f"Markers not found in {filepath}.\n"
             f"Add these two comments inside your .post-list div:\n"
-            f"  {START_MARKER}\n"
-            f"  {END_MARKER}"
+            f"  {start}\n"
+            f"  {end}"
         )
         return
 
-    pattern = re.escape(START_MARKER) + r".*?" + re.escape(END_MARKER)
+    pattern = re.escape(start) + r".*?" + re.escape(end)
     new_content, count = re.subn(pattern, replacement, content, flags=re.DOTALL)
 
     if count == 0:
