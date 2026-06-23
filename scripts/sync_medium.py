@@ -176,7 +176,8 @@ def fetch_feed(url: str):
     print(f"Fetching {url} …")
     response = requests.get(url, headers=_HTTP_HEADERS, timeout=30)
     if response.status_code != 200:
-        raise RuntimeError(f"Failed to fetch RSS feed {url}: HTTP {response.status_code}")
+        print(f"⚠️  Skipping {url} — HTTP {response.status_code} (feed may block CI IPs)")
+        return None
     feed = feedparser.parse(response.content)
     if feed.bozo:
         print(f"⚠️  Feed parse warning: {feed.bozo_exception}")
@@ -186,6 +187,8 @@ def fetch_feed(url: str):
 def sync_feed(rss_url, source_label, template, env):
     """Fetch one RSS feed, render post pages, return list of card HTML strings."""
     feed = fetch_feed(rss_url)
+    if feed is None:
+        return []
     entries = feed.entries[:MAX_POSTS]
     if not entries:
         print(f"  No entries found for {source_label}.")
