@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Writing — Xie Jiayu Dias</title>
+  <title>Nobody could have guessed the challenge of "Raising the Curve" of public schools — Xie Jiayu Dias</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
@@ -36,7 +36,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ══ TOP NAV ══ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -77,14 +76,12 @@
     }
     .btn-dl:hover { opacity: 0.85; }
 
-    /* ══ PAGE SHELL ══ */
     .page-shell {
       display: flex;
       padding-top: var(--nav-h);
       min-height: 100vh;
     }
 
-    /* ══ LEFT SIDEBAR ══ */
     .left-sidebar {
       width: var(--sidebar-w);
       flex-shrink: 0;
@@ -129,17 +126,15 @@
       text-decoration: none; transition: color 0.2s;
     }
     .sidebar-link:hover { color: var(--accent); }
-    .sidebar-link .icon { width: 16px; text-align: center; font-size: 0.85rem; flex-shrink: 0; }
+    .sidebar-link .icon { width: 16px; text-align: center; font-size: 0.85rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
-    /* ══ MAIN CONTENT ══ */
     .main-content {
       flex: 1; min-width: 0;
       padding: 3.5rem 2.5rem 6rem;
-      max-width: 860px;
+      max-width: 740px;
       margin: 0 auto;
     }
 
-    /* breadcrumb */
     .breadcrumb {
       font-size: 0.8rem; color: var(--ink-faint);
       margin-bottom: 2rem;
@@ -148,62 +143,116 @@
     .breadcrumb a { color: var(--accent); text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
 
-    .page-title {
-      font-family: var(--serif);
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 600; letter-spacing: -0.02em;
-      color: var(--ink); margin-bottom: 0.5rem;
-    }
+    .post-header { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
 
-    .page-subtitle {
-      font-size: 0.95rem; color: var(--ink-muted);
-      line-height: 1.7; margin-bottom: 2.5rem;
-      max-width: 520px;
-    }
-
-    .rule { width: 28px; height: 2px; background: var(--accent); margin-bottom: 1.5rem; }
-
-    .section-label {
-      font-size: 0.7rem; font-weight: 500;
+    .post-eyebrow {
+      font-size: 0.72rem; font-weight: 500;
       letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--ink-faint); margin-bottom: 1rem;
+      color: var(--accent); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
     }
-
-    /* posts */
-    .post-list { display: flex; flex-direction: column; }
-
-    .post-item {
-      display: grid; grid-template-columns: 76px 1fr;
-      gap: 0 1.25rem; padding: 1.25rem 0.6rem;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none; color: inherit;
-      transition: background 0.15s;
-      border-radius: 6px; margin: 0 -0.6rem;
-    }
-    .post-item:last-child { border-bottom: none; }
-    .post-item:hover { background: var(--paper-warm); }
-
-    .post-date {
-      font-size: 0.75rem; color: var(--ink-faint);
-      padding-top: 0.15rem;
-      font-variant-numeric: tabular-nums; white-space: nowrap;
-    }
+    .post-eyebrow-sep { color: var(--border); }
 
     .post-title {
       font-family: var(--serif);
-      font-size: 1rem; font-weight: 400;
-      color: var(--ink); line-height: 1.45; margin-bottom: 0.3rem;
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 600; line-height: 1.2;
+      letter-spacing: -0.02em; color: var(--ink);
+      margin-bottom: 1rem;
     }
 
-    .post-excerpt { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.6; }
-
-    .post-tag {
-      display: inline-block; font-size: 0.68rem;
-      font-weight: 500; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--accent); margin-top: 0.45rem;
+    .post-subtitle {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-style: italic;
+      color: var(--ink-muted); line-height: 1.6;
+      margin-bottom: 1.5rem;
     }
 
-    /* footer */
+    .post-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+    .post-author { display: flex; align-items: center; gap: 0.5rem; }
+
+    .author-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%; overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--paper-warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; flex-shrink: 0;
+    }
+    .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .author-name { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+    .meta-sep { color: var(--border); font-size: 1rem; }
+    .post-date-meta { font-size: 0.82rem; color: var(--ink-faint); }
+    .post-read-time { font-size: 0.82rem; color: var(--ink-faint); }
+
+    .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.25rem; }
+
+    .tag {
+      font-size: 0.72rem; font-weight: 500;
+      padding: 0.25rem 0.65rem; border-radius: 100px;
+      background: var(--paper-warm); color: var(--ink-muted);
+      border: 1px solid var(--border); letter-spacing: 0.02em;
+    }
+
+    .post-body { font-size: 1rem; color: var(--ink); line-height: 1.85; }
+    .post-body p { margin-bottom: 1.5rem; }
+
+    .post-body h2 {
+      font-family: var(--serif);
+      font-size: 1.4rem; font-weight: 600;
+      letter-spacing: -0.01em; color: var(--ink);
+      margin: 2.5rem 0 1rem; padding-top: 0.5rem;
+    }
+
+    .post-body h3 {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--ink); margin: 2rem 0 0.75rem;
+    }
+
+    .post-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      margin: 2rem 0;
+      background: var(--accent-soft);
+      border-radius: 0 8px 8px 0;
+    }
+    .post-body blockquote p {
+      font-family: var(--serif);
+      font-size: 1.05rem; font-style: italic;
+      color: var(--ink); margin-bottom: 0; line-height: 1.7;
+    }
+
+    .post-body figure { margin: 2.5rem auto; max-width: 400px; }
+    .post-body figure img {
+      width: 100%; border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .post-body figcaption {
+      font-size: 0.78rem; color: var(--ink-faint);
+      text-align: center; margin-top: 0.6rem; font-style: italic;
+    }
+
+    .post-footer {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .post-footer-label {
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 1.25rem;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.88rem; color: var(--accent);
+      text-decoration: none; border-bottom: 1px solid var(--accent-soft);
+      padding-bottom: 1px; transition: border-color 0.2s;
+    }
+    .back-link:hover { border-color: var(--accent); }
+
     footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; }
     .footer-inner {
       display: flex; justify-content: space-between;
@@ -218,7 +267,6 @@
     }
     .footer-links a:hover { color: var(--accent); }
 
-    /* hamburger */
     .nav-toggle {
       display: none; flex-direction: column; justify-content: center;
       gap: 5px; width: 36px; height: 36px;
@@ -233,11 +281,9 @@
     .nav-toggle.open span:nth-child(2) { opacity: 0; }
     .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* responsive */
     @media (max-width: 768px) {
       .left-sidebar { display: none; }
       .main-content { padding: 2rem 1.25rem 4rem; max-width: 100%; margin: 0; }
-      .footer-inner { padding-left: 0; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
       .nav-toggle { display: flex; }
       .nav-links {
         display: none; flex-direction: column;
@@ -251,6 +297,8 @@
       .nav-links a { display: block; font-size: 0.95rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
       .nav-links li:last-child a { border-bottom: none; }
       .btn-dl { display: inline-block; margin-top: 0.5rem; font-size: 0.85rem; padding: 0.5rem 1.2rem; }
+      .post-title { font-size: 1.6rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
     }
   </style>
 </head>
@@ -258,18 +306,18 @@
 
   <nav>
     <div class="nav-inner">
-      <a href="index.html" class="nav-logo">Xie Jiayu<span>.</span></a>
+      <a href="../index.html" class="nav-logo">Xie Jiayu<span>.</span></a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html#home">Home</a></li>
-        <li><a href="writing.html" class="active">Writing</a></li>
-        <li><a href="index.html#projects">Projects</a></li>
-        <li><a href="index.html#research">Research</a></li>
-        <li><a href="personal.html">Personal</a></li>
-        <li><a href="cv.html">CV</a></li>
-        <li><a href="CV___XieJiayuDias.pdf" class="btn-dl" download>↓ Download CV</a></li>
+        <li><a href="../index.html#home">Home</a></li>
+        <li><a href="../writing.html" class="active">Writing</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#research">Research</a></li>
+        <li><a href="../personal.html">Personal</a></li>
+        <li><a href="../cv.html">CV</a></li>
+        <li><a href="../CV___XieJiayuDias.pdf" class="btn-dl" download>↓ Download CV</a></li>
       </ul>
     </div>
   </nav>
@@ -278,16 +326,16 @@
 
     <aside class="left-sidebar">
       <div class="avatar-wrap">
-        <img src="photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
+        <img src="../photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
       </div>
       <p class="sidebar-name">Xie Jiayu Dias</p>
       <p class="sidebar-bio">Data Engineer &amp; AI Researcher. Passionate about Explainable AI, STEM outreach, and building things that make complex ideas accessible.</p>
       <div class="sidebar-links">
         <span class="sidebar-link"><span class="icon">📍</span> Knoxville, TN, USA</span>
-        <a href="index.html" class="sidebar-link"><span class="icon">🌐</span> Website</a>
+        <a href="../index.html" class="sidebar-link"><span class="icon">🌐</span> Website</a>
         <a href="https://linkedin.com/in/xie-jiayu" target="_blank" class="sidebar-link"><span class="icon">💼</span> LinkedIn</a>
         <a href="mailto:jiayuxie95@gmail.com" class="sidebar-link"><span class="icon">✉️</span> Email</a>
-        <a href="cv.html" class="sidebar-link"><span class="icon">📄</span> CV</a>
+        <a href="../cv.html" class="sidebar-link"><span class="icon">📄</span> CV</a>
         <a href="https://medium.com/@jiayuxie95" target="_blank" class="sidebar-link"><span class="icon">✍️</span> Medium</a>
         <a href="https://github.com/xiejiayu95" target="_blank" class="sidebar-link"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></span> GitHub</a>
         <a href="https://xiedias.substack.com" target="_blank" class="sidebar-link"><span class="icon">📬</span> Substack</a>
@@ -297,59 +345,72 @@
     <main class="main-content">
 
       <nav class="breadcrumb" aria-label="breadcrumb">
-        <a href="index.html">Home</a>
+        <a href="../index.html">Home</a>
         <span>/</span>
-        <strong>Writing</strong>
+        <a href="../writing.html">Writing</a>
+        <span>/</span>
+        <strong>Nobody could have guessed the challenge of "Raising the Curve"</strong>
       </nav>
 
-      <h1 class="page-title">Writing</h1>
-      <p class="page-subtitle">Essays, notes, and book reviews. Originally published on Medium.</p>
-      <div class="rule"></div>
+      <header class="post-header">
 
-      <!-- ── Technical Articles ── -->
-      <p class="section-label">Technical Articles</p>
-      <div class="post-list">
-        <!-- MEDIUM_POSTS_START -->
-<a href="posts/what-i-learned-using-agentic-ai-tools-to-develop-an-app.html" class="post-item">
-  <span class="post-date">Jun 2026</span>
-  <div>
-    <p class="post-title">What I learned using agentic AI tools to develop an app</p>
-    <p class="post-excerpt">Is AI ready to replace developers once and for all? I kept hearing that AI had made developers obsolete, that anyone could ship an app with a single prompt. I…</p>
-    <span class="post-tag">artificial-intelligence</span>
-  </div>
-</a>
-<a href="posts/what-is-agi-and-should-we-be-worried.html" class="post-item">
-  <span class="post-date">Jun 2026</span>
-  <div>
-    <p class="post-title">What is AGI, and should we be worried?</p>
-    <p class="post-excerpt">Half the internet thinks AGI will save humanity. The other half thinks it will end it. Both camps are missing the point, and this article is for everyone who…</p>
-    <span class="post-tag">artificial-intelligence</span>
-  </div>
-</a>
-<a href="posts/every-time-you-ask-an-ai-a-question-it-drinks-water.html" class="post-item">
-  <span class="post-date">Jun 2026</span>
-  <div>
-    <p class="post-title">Every Time You Ask an AI a Question, It Drinks Water</p>
-    <p class="post-excerpt">Data centers are among the fastest-growing water consumers in the world. Here’s what’s happening and why you haven’t heard more about it. Picture the last time…</p>
-    <span class="post-tag">climate</span>
-  </div>
-</a>
-          <!-- MEDIUM_POSTS_END -->
-      </div>
+        <p class="post-eyebrow">
+          <span>Book Review</span>
+          <span class="post-eyebrow-sep">·</span>
+          <span>Jun 2026</span>
+        </p>
 
-      <!-- ── Book Reviews ── -->
-      <p class="section-label" style="margin-top: 3rem;">Book Reviews</p>
-      <div class="post-list">
-        <!-- SUBSTACK_POSTS_START -->
-          <a href="posts/nobody-could-have-guessed-the-challenge.html" class="post-item">
-            <span class="post-date">Jun 2026</span>
-            <div>
-              <p class="post-title">Nobody could have guessed the challenge of &#34;Raising the Curve&#34; of public schools</p>
-              <p class="post-excerpt">A review of Ron Berler&#39;s book following Brookside Elementary as it prepares for standardized testing amid budget cutbacks and a parental engagement gap.</p>
-              <span class="post-tag">book-review</span>
+        <h1 class="post-title">Nobody could have guessed the challenge of "Raising the Curve" of public schools</h1>
+
+        <p class="post-subtitle">A review of the "Raising the Curve" book (author: Ron Berler)</p>
+
+        <div class="post-meta">
+          <div class="post-author">
+            <div class="author-avatar">
+              <img src="../photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
             </div>
-          </a>
-        <!-- SUBSTACK_POSTS_END -->
+            <span class="author-name">Xie Jiayu Dias</span>
+          </div>
+          <span class="meta-sep">·</span>
+          <span class="post-date-meta">June 23, 2026</span>
+          <span class="meta-sep">·</span>
+          <span class="post-read-time">3 min read</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">book-review</span>
+          <span class="tag">education</span>
+        </div>
+
+      </header>
+
+      <article class="post-body">
+
+        <p>Ron Berler walks us through the routine of each character in a public school throughout the book. He constructs the narrative of the school year's events by weaving together the daily activities of each person — from the well-behaved student to the most troublesome one, from the dedicated librarian to the most devoted literacy specialist, and from the persevering teachers to the unstoppable principal.</p>
+
+        <p>Brookside Elementary is a public school from Norwalk, Connecticut. It carries a failing score (along with many other public schools in the same region) and has a chance to change that reputation as it gets prepared to face that year's standardized CMT test.</p>
+
+        <figure>
+          <img src="https://substackcdn.com/image/fetch/$s_!FyE0!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb4785810-66b2-43df-a032-26a08224de43_1000x1500.jpeg" alt="Raising the Curve book cover" />
+          <figcaption>Raising the Curve — Ron Berler</figcaption>
+        </figure>
+
+        <p>Although everyone is determined to raise the bar, things do not go as expected. Budget cutbacks affect staffing, forcing Principal Hay to make tough decisions. The children are not motivated to read, and their parents neither help with homework nor attend parent meetings at the school.</p>
+
+        <p>It is easy for an outsider to judge the school's results, but the author offers a different perspective by showing the nuances of each person. For instance, he shows how hard it is for a Latino child, whose non-English-speaking parents work long hours, to become a fluent reader when he has neither the resources at home nor the motivation to read. Relying on schoolteachers alone is not sufficient to close that learning gap. By contrast, the small percentage of white children, who have all the resources and support at home, often scores high on the tests. Those that suffer the most come from poorer backgrounds, mostly Black and Hispanic.</p>
+
+        <p>Another point of controversy is the CMT test itself. From the perspective of the people that designed it, the goal was to gauge whether students were ready for high school and how public schools compared to private ones. But those preparing the children for the exam felt pressured to produce a score — a score that labels a school as failing or passing, which in turn affects how its administration operates the following year.</p>
+
+        <p>Despite the challenges, each student finds a reason to outperform their own previous results. The motivations vary, from the threat of "you are repeating fifth grade" to simply maturing as they grow older.</p>
+
+      </article>
+
+      <div class="post-footer">
+        <p class="post-footer-label">More Writing</p>
+        <a href="../writing.html" class="back-link">← Back to all posts</a>
+        <p style="margin-top:0.75rem;">
+          <a href="https://xiedias.substack.com/p/nobody-could-have-guessed-the-challenge" target="_blank" rel="noopener" class="back-link">Originally published on Substack ↗</a>
+        </p>
       </div>
 
     </main>
@@ -361,7 +422,7 @@
       <ul class="footer-links">
         <li><a href="https://linkedin.com/in/xie-jiayu" target="_blank">LinkedIn</a></li>
         <li><a href="mailto:jiayuxie95@gmail.com">Email</a></li>
-        <li><a href="CV___XieJiayuDias.pdf" download>Download CV</a></li>
+        <li><a href="../CV___XieJiayuDias.pdf" download>Download CV</a></li>
       </ul>
     </div>
   </footer>
