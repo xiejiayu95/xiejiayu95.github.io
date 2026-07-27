@@ -254,6 +254,20 @@
 
     .project-icon { font-size: 1.4rem; margin-bottom: 0.2rem; }
 
+    .project-thumb {
+      position: relative; width: 100%; margin-bottom: 0.5rem;
+      border-radius: 6px; overflow: hidden; aspect-ratio: 16/9;
+      background: #000;
+    }
+    .project-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .project-thumb-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.25); transition: background 0.2s;
+    }
+    .project-card:hover .project-thumb-play { background: rgba(0,0,0,0.1); }
+    .project-thumb-play svg { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+
     .project-name {
       font-family: var(--serif);
       font-size: 0.95rem; font-weight: 600; color: var(--ink);
@@ -615,8 +629,16 @@
             <p class="project-desc">Independent research on XAI methods and development of AI-assisted tools designed to make machine learning accessible for public education.</p>
             <p class="project-stack">Python · ML · AI-assisted tools</p>
           </a>
-          <a href="#" class="project-card">
-            <div class="project-icon">🤖</div>
+          <a href="https://youtu.be/V8oxne6xptI?si=N7Ns2GPUwnfr_WhN" class="project-card" target="_blank" rel="noopener">
+            <div class="project-thumb">
+              <img src="https://img.youtube.com/vi/V8oxne6xptI/hqdefault.jpg" alt="Robotic Substation System demo video" loading="lazy" />
+              <div class="project-thumb-play">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="24" r="24" fill="white" fill-opacity="0.9"/>
+                  <polygon points="19,14 38,24 19,34" fill="#c25c2e"/>
+                </svg>
+              </div>
+            </div>
             <p class="project-name">Robotic Substation System</p>
             <p class="project-desc">Integrated robotic system for electric substations at Lactec. Secured Phase II approval from sponsors with computer vision and ROS.</p>
             <p class="project-stack">ROS · Computer Vision · Python</p>
