@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ✏️ EDIT: Change this to your post title -->
+  <title>I Built a RAG System That Reads Explainability Research For Me — Xie Jiayu Dias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1814;
+      --ink-muted: #6b6560;
+      --ink-faint: #b0aa9f;
+      --paper: #faf8f4;
+      --paper-warm: #f3efe8;
+      --paper-card: #fff;
+      --accent: #c25c2e;
+      --accent-soft: #f0e4da;
+      --border: #e4ddd4;
+      --serif: 'Lora', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --nav-h: 64px;
+      --sidebar-w: 200px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══ TOP NAV — identical to index.html ══ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: var(--nav-h);
+      background: rgba(250,248,244,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+
+    .nav-inner {
+      width: 100%; max-width: 1100px;
+      margin: 0 auto; padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem; color: var(--ink);
+      text-decoration: none; letter-spacing: -0.01em;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 1.6rem; list-style: none; align-items: center; }
+
+    .nav-links a {
+      font-size: 0.86rem; color: var(--ink-muted);
+      text-decoration: none; letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--accent); font-weight: 500; }
+
+    .btn-dl {
+      font-size: 0.78rem; font-weight: 500;
+      padding: 0.35rem 1rem; border-radius: 100px;
+      background: var(--accent); color: #fff;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .btn-dl:hover { opacity: 0.85; }
+
+    /* ══ PAGE SHELL ══ */
+    .page-shell {
+      display: flex;
+      padding-top: var(--nav-h);
+      min-height: 100vh;
+    }
+
+    /* ══ LEFT SIDEBAR — identical to index.html ══ */
+    .left-sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow-y: auto;
+      padding: 2rem 1.25rem 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+      background: var(--paper);
+      z-index: 10;
+    }
+
+    .avatar-wrap {
+      width: 84px; height: 84px;
+      border-radius: 50%; overflow: hidden;
+      margin-bottom: 1rem;
+      border: 2px solid var(--border);
+      background: var(--paper-warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    .sidebar-name {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--ink); margin-bottom: 0.45rem;
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-bio {
+      font-size: 0.8rem; color: var(--ink-muted);
+      line-height: 1.6; margin-bottom: 1.4rem;
+    }
+
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .sidebar-link {
+      display: flex; align-items: center; gap: 0.55rem;
+      font-size: 0.8rem; color: var(--ink-muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .sidebar-link:hover { color: var(--accent); }
+    .sidebar-link .icon {
+      width: 16px; text-align: center;
+      font-size: 0.85rem; flex-shrink: 0;
+    }
+
+    /* ══ ARTICLE MAIN ══ */
+    .main-content {
+      flex: 1; min-width: 0;
+      padding: 3.5rem 2.5rem 6rem;
+      max-width: 740px;  /* narrower than index for comfortable reading */
+      margin: 0 auto;
+    }
+
+    /* breadcrumb */
+    .breadcrumb {
+      font-size: 0.8rem; color: var(--ink-faint);
+      margin-bottom: 2rem;
+      display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* post header */
+    .post-header { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+
+    .post-eyebrow {
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+
+    .post-eyebrow-sep { color: var(--border); }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 600; line-height: 1.2;
+      letter-spacing: -0.02em; color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .post-subtitle {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-style: italic;
+      color: var(--ink-muted); line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-meta {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .post-author {
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .author-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%; overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--paper-warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; flex-shrink: 0;
+    }
+    .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .author-name { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+
+    .meta-sep { color: var(--border); font-size: 1rem; }
+
+    .post-date-meta { font-size: 0.82rem; color: var(--ink-faint); }
+    .post-read-time { font-size: 0.82rem; color: var(--ink-faint); }
+
+    .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.25rem; }
+
+    .tag {
+      font-size: 0.72rem; font-weight: 500;
+      padding: 0.25rem 0.65rem; border-radius: 100px;
+      background: var(--paper-warm); color: var(--ink-muted);
+      border: 1px solid var(--border); letter-spacing: 0.02em;
+    }
+
+    /* ── article body ── */
+    .post-body { font-size: 1rem; color: var(--ink); line-height: 1.85; }
+
+    /* lead paragraph */
+    .post-body .lead {
+      font-family: var(--serif);
+      font-size: 1.15rem; color: var(--ink-muted);
+      line-height: 1.8; margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    /* regular paragraphs */
+    .post-body p { margin-bottom: 1.5rem; }
+
+    /* headings inside post */
+    .post-body h2 {
+      font-family: var(--serif);
+      font-size: 1.4rem; font-weight: 600;
+      letter-spacing: -0.01em; color: var(--ink);
+      margin: 2.5rem 0 1rem;
+      padding-top: 0.5rem;
+    }
+
+    .post-body h3 {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--ink); margin: 2rem 0 0.75rem;
+    }
+
+    /* pull quote / callout */
+    .post-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      margin: 2rem 0;
+      background: var(--accent-soft);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .post-body blockquote p {
+      font-family: var(--serif);
+      font-size: 1.05rem; font-style: italic;
+      color: var(--ink); margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* callout box */
+    .callout {
+      background: var(--paper-warm);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+
+    .callout-label {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.5rem;
+    }
+
+    /* inline code */
+    .post-body code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.88rem;
+      background: var(--paper-warm);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      color: var(--accent);
+    }
+
+    /* code block */
+    .post-body pre {
+      background: #1e1c18;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 2rem 0;
+    }
+
+    .post-body pre code {
+      background: none; border: none; padding: 0;
+      color: #e8e0d0; font-size: 0.85rem; line-height: 1.6;
+    }
+
+    /* lists */
+    .post-body ul, .post-body ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-body li { margin-bottom: 0.4rem; }
+
+    /* horizontal divider */
+    .post-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* image */
+    .post-body figure { margin: 2.5rem 0; }
+
+    .post-body figure img {
+      width: 100%; border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .post-body figcaption {
+      font-size: 0.78rem; color: var(--ink-faint);
+      text-align: center; margin-top: 0.6rem;
+      font-style: italic;
+    }
+
+    /* ── post footer ── */
+    .post-footer {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .post-footer-label {
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 1.25rem;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.88rem; color: var(--accent);
+      text-decoration: none; border-bottom: 1px solid var(--accent-soft);
+      padding-bottom: 1px; transition: border-color 0.2s;
+    }
+    .back-link:hover { border-color: var(--accent); }
+
+    /* ── footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+    }
+
+    .footer-inner {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 1rem; flex-wrap: wrap;
+      padding-left: 1rem;
+    }
+
+    .footer-copy { font-size: 0.78rem; color: var(--ink-faint); }
+    .footer-links { display: flex; gap: 1.25rem; list-style: none; }
+    .footer-links a {
+      font-size: 0.78rem; color: var(--ink-muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── hamburger button (mobile only) ── */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: none; border: none;
+      cursor: pointer; padding: 4px;
+      border-radius: 6px;
+    }
+    .nav-toggle span {
+      display: block; height: 2px; width: 22px;
+      background: var(--ink); border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── responsive ── */
+    @media (max-width: 768px) {
+      .left-sidebar { display: none; }
+      .main-content { padding: 2rem 1.25rem 4rem; max-width: 100%; margin: 0; }
+
+      /* hamburger visible */
+      .nav-toggle { display: flex; }
+
+      /* nav links become a dropdown panel */
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: rgba(250,248,244,0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 0.1rem;
+        z-index: 199;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block;
+        font-size: 0.95rem;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links li:last-child a { border-bottom: none; }
+      .btn-dl {
+        display: inline-block;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        padding: 0.5rem 1.2rem;
+      }
+
+      /* post title smaller on mobile */
+      .post-title { font-size: 1.6rem; }
+
+      /* footer stacks */
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ TOP NAV ══ -->
+  <nav>
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">Xie Jiayu<span>.</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html#home">Home</a></li>
+        <li><a href="../index.html#writing" class="active">Writing</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#research">Research</a></li>
+        <li><a href="../index.html#personal">Personal</a></li>
+        <li><a href="../cv.html">CV</a></li>
+        <li><a href="../CV___XieJiayuDias.pdf" class="btn-dl" download>↓ Download CV</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══ PAGE SHELL ══ -->
+  <div class="page-shell">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="left-sidebar">
+      <div class="avatar-wrap">
+        <img src="../photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
+      </div>
+      <p class="sidebar-name">Xie Jiayu Dias</p>
+      <p class="sidebar-bio">Data Engineer &amp; AI Researcher. Passionate about Explainable AI, STEM outreach, and building things that make complex ideas accessible.</p>
+      <div class="sidebar-links">
+        <span class="sidebar-link"><span class="icon">📍</span> Knoxville, TN, USA</span>
+        <a href="../index.html" class="sidebar-link"><span class="icon">🌐</span> Website</a>
+        <a href="https://linkedin.com/in/xie-jiayu" target="_blank" class="sidebar-link"><span class="icon">💼</span> LinkedIn</a>
+        <a href="mailto:jiayuxie95@gmail.com" class="sidebar-link"><span class="icon">✉️</span> Email</a>
+        <a href="../cv.html" class="sidebar-link"><span class="icon">📄</span> CV</a>
+        <a href="https://medium.com/@jiayuxie95" target="_blank" class="sidebar-link"><span class="icon">✍️</span> Medium</a>
+        <a href="https://github.com/xiejiayu95" target="_blank" class="sidebar-link"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></span> GitHub</a>
+        <a href="https://xiedias.substack.com" target="_blank" class="sidebar-link"><span class="icon">📚</span> Substack</a>
+      </div>
+    </aside>
+
+    <!-- ══ ARTICLE ══ -->
+    <main class="main-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#writing">Writing</a>
+        <span>/</span>
+<strong>I Built a RAG System That Reads Explainability Research For Me</strong>
+      </nav>
+
+      <!-- Post Header -->
+      <header class="post-header">
+
+        <p class="post-eyebrow">
+          <span>llm</span>
+          <span class="post-eyebrow-sep">·</span>
+          <span>Aug 2026</span>
+        </p>
+
+        <h1 class="post-title">I Built a RAG System That Reads Explainability Research For Me</h1>
+
+        
+
+        <!-- Author + meta -->
+        <div class="post-meta">
+          <div class="post-author">
+            <div class="author-avatar">
+              <img src="../photo.jpg" alt="Xie Jiayu Dias" onerror="this.parentElement.innerHTML='🧑‍💻'" />
+            </div>
+            <span class="author-name">Xie Jiayu Dias</span>
+          </div>
+          <span class="meta-sep">·</span>
+          <span class="post-date-meta">August 6, 2026</span>
+          <span class="meta-sep">·</span>
+          <span class="post-read-time">6 min read</span>
+        </div>
+
+        <div class="post-tags">
+          <span class="tag">llm</span><span class="tag">ai</span><span class="tag">research</span><span class="tag">llm-applications</span>
+        </div>
+
+      </header>
+
+      <!-- ══ POST BODY ══ -->
+      <article class="post-body">
+<p><em>How I turned “I can’t keep up with this field” into my LLM Zoomcamp capstone project: a daily digest for explainable AI system, pulling data from arXiv, Anthropic, and OpenAI.</em></p><p>As part of my transition into AI research, I’ve felt overwhelmed by how much there is to catch up on. Most of the time I don’t even know whether the method I’m studying or trying to replicate is actually state-of-the-art, because the field keeps evolving so fast.</p><p>Explainability research is a good example of the problem. The work I care about (mechanistic interpretability, feature attribution, model transparency, the alignment-adjacent edges of all three) moves quickly and lives everywhere. Some of it lands on arXiv as preprints. Some of it shows up on Anthropic’s research page. Some of it goes out through OpenAI’s feed. Not mentioning that a lot of those works live in other labs/frontier companies’ feed. There’s no single place to track it all, so “staying current” means remembering to check several sites and hoping I didn’t miss the one that mattered.</p><p>So, for the capstone project of the <a href="https://github.com/DataTalksClub/llm-zoomcamp">LLM Zoomcamp</a> (by DataTalks.Club), I decided to build a system reads the explainability research for me. Something I could keep using in my daily research routine, not a notebook I’d run once for a grade.</p><p>I called it <strong>XAI Daily Digest</strong>. It’s a daily journal of sorts for checking the latest advancements in explainable AI. And because it’s a RAG system underneath, I can also chat with it to look up definitions and concepts I’m not yet familiar with, grounded in the papers themselves.</p><figure><img alt="" src="https://cdn-images-1.medium.com/max/800/1*ou-t9iwJhGYNsPmjgxZsvw.gif" /><figcaption>A quick demo of <strong>XAI Daily Digest.</strong></figcaption></figure><p><strong>The repository is here:</strong> <a href="https://github.com/xiejiayu95/research-assistant">github.com/xiejiayu95/research-assistant</a></p><h3>What it actually does</h3><p>Two things, really.</p><p>You can <strong>ask it questions</strong> about everything it has collected, such as “What is mechanistic interpretability, and how does it differ from feature attribution methods?”, and it answers from the retrieved research with inline [1] [2] citations that link straight back to the source papers and posts. Given that the whole subject is <em>explainability</em>, the citations aren’t decoration; they’re the point. If a tool is going to tell me what the latest transparency research says, it had better show me exactly where each claim came from.</p><p>Or you can ask it to <strong>generate a digest</strong>: a themed summary of everything ingested in the last 24 hours, with the same citation treatment. That’s the “daily journal” use case: open it in the morning, see what’s new across all three sources, click through to whatever looks worth reading in full.</p><h3>How it works</h3><p>Under the hood it’s a full pipeline, not a single script, and building each stage properly is where most of the learning happened.</p><p><strong>Ingestion.</strong> Every day, the system pulls XAI-relevant content from three sources: the arXiv API (filtered to interpretability and explainability papers across cs.AI, cs.LG, cs.CL, and cs.CV), Anthropic’s research index page, and OpenAI’s research feed. I selected these three sources manually for now — they’re the ones I most read — and the design leaves room to add more. The ingestion runs as a <a href="https://www.prefect.io/">Prefect</a> flow served on a daily cron schedule inside its own container, so it’s a real orchestrated pipeline rather than something I have to remember to trigger. New items are deduplicated and logged in Postgres, then chunked, embedded, and written to the vector store.</p><p><strong>Retrieval.</strong> This is the part I’m happiest with. Each chunk gets two representations in a single <a href="https://qdrant.tech/">Qdrant</a> collection: a dense vector from OpenAI’s text-embedding-3-small, and a sparse BM25 vector via fastembed. At query time the system fuses both with Reciprocal Rank Fusion — hybrid search — so it benefits from semantic similarity <em>and</em> exact keyword matching instead of forcing a choice between them. The fused results are then re-ranked with a local cross-encoder through <a href="https://github.com/PrithivirajDamodaran/FlashRank">FlashRank</a>. And before any of that, the user’s question is rewritten by the LLM to broaden recall.</p><p>Query rewrite → hybrid search → rerank → answer</p><p><strong>Grounding.</strong> Retrieved chunks go to an OpenAI chat model (gpt-4o-mini by default, configurable) with a prompt that enforces citations, and the answer comes back with a “Sources” expander tying every claim to a paper or post.</p><p><strong>Evaluation.</strong> I didn’t want to pick these design choices by vibe, so I measured them. For retrieval, an LLM generates a golden set of roughly sixty questions — one per sampled chunk — and I compare three strategies against it by Hit Rate@5 and MRR@5: dense-only vector search, hybrid (dense + sparse RRF), and hybrid plus reranking. For generation, I compare three prompt-and-model variants — a baseline prompt on gpt-4o-mini, a citation-enforcing prompt on gpt-4o-mini, and the baseline on gpt-4o — scored by an LLM-as-judge on relevance and faithfulness. The design decisions are backed by numbers I can point to.</p><p><strong>Monitoring.</strong> Thumbs-up/thumbs-down feedback from the app, answer latency, and ingestion volume by source all flow into a Grafana dashboard that populates automatically as the app is used.</p><p><strong>Reproducibility.</strong> The whole thing runs on Docker Compose. Clone the repo, set an OpenAI key, docker compose up — Postgres, Qdrant, Grafana, the ingestion container, and the Streamlit app come up together. You don’t need any of the course material to run or evaluate it; it’s a standalone app.</p><p>Here’s the shape of it end to end:</p><pre>arXiv API  ─┐<br />Anthropic  ─┼─▶ ingestion (Prefect) ─▶ Postgres (metadata, dedup, logs)<br />OpenAI     ─┘                        └▶ Qdrant (dense + sparse hybrid vectors)<br />                                              │<br />                                              ▼<br />                         query rewrite → hybrid search → FlashRank rerank → OpenAI chat<br />                                              │<br />                              ┌───────────────┴───────────────┐<br />                              ▼                               ▼<br />                     Streamlit app (Ask + Digest)     Grafana (monitoring)</pre><p><strong>The stack:</strong> OpenAI · Qdrant · Postgres · Prefect · Streamlit · Grafana · Docker Compose.</p><h3>What I’d tell you before you rely on it</h3><p>It ingests <strong>abstracts and blog summaries, not full paper text</strong>. That’s enough for a daily-digest use case and for surfacing what’s new, but a deep question about a specific paper’s methodology will only be as good as what the abstract contains.</p><p>The <strong>arXiv relevance filter is a heuristic</strong> — a keyword check for interpretability-related terms — so it will occasionally let through a paper that mentions “interpretable” only in passing, or miss one that’s on-topic but phrased differently. An LLM-based relevance classifier is the natural next step.</p><p>And the <strong>Anthropic ingestion scrapes their public research index</strong> because there’s no RSS feed to consume; if that page’s markup changes, that fetcher will need updating. Trading robustness for coverage was a deliberate call, but it’s a real dependency.</p><h3>The part that stuck with me</h3><p>Building a RAG system <em>about</em> interpretability changed how I thought about the citation layer. In most RAG demos, citations are a nice-to-have you bolt on at the end. Here, tracing every generated sentence back to a specific source felt like the actual subject of the project leaking into its design — the same traceability that explainability research is chasing inside models, I was chasing inside my own tool. Legible isn’t the same as objective, and a system that shows its sources isn’t automatically right. But it’s the difference between an answer I can check and one I just have to trust.</p><p>If you want to look at the code, run it, or tear the design apart, it’s all here: <a href="https://github.com/xiejiayu95/research-assistant"><strong>github.com/xiejiayu95/research-assistant</strong></a>.</p><p>Huge thanks to <a href="https://github.com/alexeygrigorev">Alexey Grigorev</a> and DataTalks.Club for a free course that genuinely goes all the way from “call an API” to “ship an orchestrated, evaluated, monitored system.” If you’re working on interpretability, or building production RAG, I’d love to compare notes.</p>
+      </article>
+
+      <!-- Post Footer -->
+      <div class="post-footer">
+        <p class="post-footer-label">More Writing</p>
+        <a href="../index.html#writing" class="back-link">← Back to all posts</a>
+        <p style="margin-top:0.75rem;"><a href="https://medium.com/@jiayuxie95/i-built-a-rag-system-that-reads-explainability-research-for-me-e73d6445cbec?source=rss-308706b8933c------2" target="_blank" rel="noopener" class="back-link">Originally published on Medium ↗</a></p>
+      </div>
+
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-copy">© 2026 Xie Jiayu Dias. Built with HTML, hosted on GitHub Pages.</p>
+      <ul class="footer-links">
+        <li><a href="https://linkedin.com/in/xie-jiayu" target="_blank">LinkedIn</a></li>
+        <li><a href="mailto:jiayuxie95@gmail.com">Email</a></li>
+        <li><a href="../CV___XieJiayuDias.pdf" download>Download CV</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+    });
+    // close menu when a link is clicked
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      links.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', false);
+    }));
+  </script>
+</body>
+</html>
